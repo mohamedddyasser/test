@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="line_template_inherit" inherit_id="account_followup.line_template">
+            <xpath expr="//span[@class='o_account_report_column_value']" position="replace">
+                <span class="o_account_report_column_value" t-out="cell.get('name')"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>

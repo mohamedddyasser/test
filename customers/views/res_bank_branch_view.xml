@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="res_bank_branch_view_form" model="ir.ui.view">
+            <field name="name">res_bank_branch_view_form</field>
+            <field name="model">res.bank.branch</field>
+            <field name="arch" type="xml">
+                <form string="Branch">
+                    <sheet>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="res_bank_id" options="{'no_quick_create': True, 'no_create_edit': True, 'no_create': True}" required="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="res_bank_branch_view_tree" model="ir.ui.view">
+            <field name="name">res_bank_branch_view_tree</field>
+            <field name="model">res.bank.branch</field>
+            <field name="arch" type="xml">
+                <tree string="Branches">
+                    <field name="name"/>
+                    <field name="res_bank_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="res_bank_branch_action" model="ir.actions.act_window">
+            <field name="name">Branches</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.bank.branch</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="res_bank_branch_menu" name="Branches" parent="contacts.menu_config_bank_accounts" action="res_bank_branch_action" sequence="7"/>
+    </data>
+</odoo>

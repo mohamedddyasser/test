@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+<!--    <record id="group_customer_creation_approval" model="res.groups">-->
+<!--        <field name="name">Customer Creation Approval</field>-->
+<!--        <field name="category_id" ref="base.module_category_hidden"/>-->
+<!--    </record>-->
+    </data>
+</odoo>

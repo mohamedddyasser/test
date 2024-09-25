@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_res_bank_branch,access_res_bank_branch,model_res_bank_branch,,1,1,1,1
+access_account_types,access_account_types,customers.model_account_types,,1,1,1,1
+

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- Inherit Form View to Modify it -->
+        <record id="view_partner_form_inherited" model="ir.ui.view">
+            <field name="name">view_partner_form_inherited</field>
+            <field name="model">res.partner</field>
+            <field name="priority" eval="2"/>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+<!--                <xpath expr="//form/sheet/div[@name='button_box']" position="before">-->
+<!--                    <header>-->
+<!--                        <button name="customer_approval_unarchive" string="Reviewed &amp; Validate" class="btn-primary"-->
+<!--                                type="object"-->
+<!--                                groups="customers.group_customer_creation_approval" invisible="active == True or customer_rank != 1"/>-->
+<!--                    </header>-->
+<!--                </xpath>-->
+                <xpath expr="//field[@name='street']" position="after">
+                    <field name="customer_rank" invisible="1"/>
+                    <field name="supplier_rank" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='vat']" position="after">
+                    <field name="trade_license" invisible="customer_rank != 1"/>
+                    <field name="signatory" invisible="customer_rank != 1"/>
+                    <field name="bank_ids" invisible="1"/>
+                    <field name="abra_bank_account_id" string="Abra Bank Account"
+                           options="{'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"
+                           context="{'check_company_id': company_id}"/>
+                </xpath>
+                <xpath expr="//field[@name='street']" position="attributes">
+                    <attribute name="required">customer_rank == 1 or supplier_rank == 1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='country_id']" position="attributes">
+                    <attribute name="required">customer_rank == 1 or supplier_rank == 1</attribute>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_partner_property_form_inherited" model="ir.ui.view">
+            <field name="name">view_partner_property_form_inherited</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <field name="property_payment_term_id" position="attributes">
+                    <attribute name="required">customer_rank == 1</attribute>
+                </field>
+                <field name="property_supplier_payment_term_id" position="attributes">
+                    <attribute name="required">supplier_rank == 1</attribute>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

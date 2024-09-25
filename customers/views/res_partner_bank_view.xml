@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- Inherit Form View to Modify it -->
+        <record id="view_partner_bank_form_inherited" model="ir.ui.view">
+            <field name="name">view_partner_bank_form_inherited</field>
+            <field name="model">res.partner.bank</field>
+            <field name="inherit_id" ref="base.view_partner_bank_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='bank_id']" position="after">
+                    <field name="branch_id" options="{'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"
+                           invisible="bank_id == False"
+                           context="{'account_bank_id': bank_id}"/>
+                    <field name="iban"/>
+                    <field name="account_type_id" options="{'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

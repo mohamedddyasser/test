@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="approve_customer_activity" model="mail.activity.type">
+            <field name="name">Customer Approve</field>
+            <field name="icon">fa-check</field>
+            <field name="chaining_type">suggest</field>
+            <field name="category">default</field>
+            <field name="res_model">res.partner</field>
+            <field name="delay_count">0</field>
+        </record>
+<!--        <record id="action_archive_customer" model="ir.actions.server">-->
+<!--            <field name="name">Archive res.partner</field>-->
+<!--            <field name="model_id" ref="model_res_partner"/>-->
+<!--            <field name="state">code</field>-->
+<!--            <field name="code">-->
+<!--                for rec in records:-->
+<!--                rec.write({-->
+<!--                'active':False-->
+<!--                })-->
+<!--            </field>-->
+<!--        </record>-->
+<!--        <record id="action_create_activity_customer_need_approve" model="ir.actions.server">-->
+<!--            <field name="name">Create activity: This customer need to your review and approve</field>-->
+<!--            <field name="model_id" ref="model_res_partner"/>-->
+<!--            <field name="state">next_activity</field>-->
+<!--            <field name="activity_summary">This customer need to your review and approve</field>-->
+<!--            <field name="activity_type_id" eval="ref('customers.approve_customer_activity')"/>-->
+<!--            <field name="activity_user_type">specific</field>-->
+<!--            <field name="activity_user_id" eval="ref('base.user_admin')"/>-->
+<!--        </record>-->
+
+<!--        <record id="action_automation_to_archive_customers" model="base.automation">-->
+<!--            <field name="name">Customer Archive</field>-->
+<!--            <field name="model_id" ref="model_res_partner"/>-->
+<!--            <field name="trigger">on_create_or_write</field>-->
+<!--            <field name="filter_pre_domain">[("customer_rank", "=", 1)]</field>-->
+<!--            <field name="filter_domain">[("customer_rank", "=", 1)]</field>-->
+<!--            <field name="trigger_field_ids" eval="[(4, ref('base.field_res_partner__id'))]"/>-->
+<!--            <field name="action_server_ids" eval="[(6,0,[ref('customers.action_archive_customer'), ref('customers.action_create_activity_customer_need_approve')])]"/>-->
+<!--            <field name="active" eval="True"/>-->
+<!--        </record>-->
+    </data>
+</odoo>

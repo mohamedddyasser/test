@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- Inherit Form View to Modify it -->
+        <record id="view_res_bank_form_inherited" model="ir.ui.view">
+            <field name="name">view_res_bank_form_inherited</field>
+            <field name="model">res.bank</field>
+            <field name="inherit_id" ref="base.view_res_bank_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='bic']" position="after">
+                    <field name="branches" widget="many2many_tags"
+                           options="{'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"
+                           context="{'res_bank_id': id}"/>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>
