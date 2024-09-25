@@ -1,7 +1,6 @@
 """This is an example that shows poorly written Python code"""
 
 import pathlib
-import random
 
 
 def make_TempDirectory(dirName):
