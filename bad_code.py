@@ -1,7 +1,5 @@
 """This is an example that shows poorly written Python code"""
 
-import csv
-import json
 import pathlib
 import random
 
@@ -17,14 +15,14 @@ def make_TempDirectory(dirName):
 def create_csv_file(fileName, cols, rows, types=[]):
     try:
         f = open(temp_dir + "/" + fileName, "w")
-    except:
+    except Exception:
         return
     if not types:
         types = [float, float, str]
 
     for i in range(rows):
-        row = list(str(types[j % len(types)](random.random())) for j in range(cols))
-        f.write(",".join(row))
+        # row = list(str(types[j % len(types)](random.random())) for j in range(cols))
+        f.write(",".join(i))
         f.write("\n")
     f.close()
 
@@ -39,9 +37,8 @@ class GildedRose(object):
                 item.name != "Aged Brie"
                 and item.name != "Backstage passes to a TAFKAL80ETC concert"
             ):
-                if item.quality > 0:
-                    if item.name != "Sulfuras, Hand of Ragnaros":
-                        item.quality = item.quality - 1
+                if item.name != "Sulfuras, Hand of Ragnaros" and item.quality > 0:
+                    item.quality = item.quality - 1
             else:
                 if item.quality < 50:
                     item.quality = item.quality + 1
