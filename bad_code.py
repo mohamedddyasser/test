@@ -1,4 +1,5 @@
 """This is an example that shows poorly written Python code"""
+
 import csv
 import json
 import pathlib
@@ -22,9 +23,7 @@ def create_csv_file(fileName, cols, rows, types=[]):
         types = [float, float, str]
 
     for i in range(rows):
-        row = list(
-            str(types[j % len(types)](random.random())) for j in range(cols)
-        )
+        row = list(str(types[j % len(types)](random.random())) for j in range(cols))
         f.write(",".join(row))
         f.write("\n")
     f.close()
@@ -80,12 +79,7 @@ class Item:
 
 # program
 if __name__ == "__main__":
-    const = (
-        "a string"
-        "written "
-        "over multiple lines "
-        "that could fit on one"
-    )
+    const = "a string" "written " "over multiple lines " "that could fit on one"
     temp_dir = "temp"
     make_TempDirectory(temp_dir)
     create_csv_file("test.csv", 3, 10)
