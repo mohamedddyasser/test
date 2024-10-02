@@ -14,9 +14,9 @@ class AccountFollowupReport(models.AbstractModel):
         as the main method not return the amount in float
         """
         partner = (
-                options.get("partner_id")
-                and self.env["res.partner"].browse(options["partner_id"])
-                or False
+            options.get("partner_id")
+            and self.env["res.partner"].browse(options["partner_id"])
+            or False
         )
         if not partner:
             return []
@@ -29,11 +29,11 @@ class AccountFollowupReport(models.AbstractModel):
         total_converted = 0.0
         default_currency = self.env.company.currency_id
         for aml in partner.unreconciled_aml_ids.sorted().filtered(
-                lambda aml: not aml.currency_id.is_zero(aml.amount_residual_currency)
+            lambda aml: not aml.currency_id.is_zero(aml.amount_residual_currency)
         ):
             if (
-                    aml.company_id in self.env.company._accessible_branches()
-                    and not aml.blocked
+                aml.company_id in self.env.company._accessible_branches()
+                and not aml.blocked
             ):
                 currency = aml.currency_id or aml.company_id.currency_id
                 if currency not in res:
@@ -143,19 +143,19 @@ class AccountFollowupReport(models.AbstractModel):
             line_num += 1
 
             cols = [
-                       {
-                           "name": v,
-                           "template": "account_followup.line_template",
-                       }
-                       for v in [""] * 3
-                   ] + [
-                       {
-                           "name": v,
-                           "style": "text-align:right; white-space:normal; font-weight: bold;",
-                           "template": "account_followup.line_template",
-                       }
-                       for v in [total >= 0 and _("Total Due") or "", total_due]
-                   ]
+                {
+                    "name": v,
+                    "template": "account_followup.line_template",
+                }
+                for v in [""] * 3
+            ] + [
+                {
+                    "name": v,
+                    "style": "text-align:right; white-space:normal; font-weight: bold;",
+                    "template": "account_followup.line_template",
+                }
+                for v in [total >= 0 and _("Total Due") or "", total_due]
+            ]
 
             lines.append(
                 {
@@ -173,19 +173,20 @@ class AccountFollowupReport(models.AbstractModel):
                 line_num += 1
 
                 cols = [
-                           {
-                               "name": v,
-                               "template": "account_followup.line_template",
-                           }
-                           for v in [""] * 3
-                       ] + [
-                           {
-                               "name": v,
-                               "style": "text-align:right; white-space:normal; font-weight: bold;",
-                               "template": "account_followup.line_template",
-                           }
-                           for v in [_("Total Overdue"), total_issued]
-                       ]
+                    {
+                        "name": v,
+                        "template": "account_followup.line_template",
+                    }
+                    for v in [""] * 3
+                ] + [
+                    {
+                        "name": v,
+                        "style": "text-align:right; white-space:normal;"
+                                 " font-weight: bold;",
+                        "template": "account_followup.line_template",
+                    }
+                    for v in [_("Total Overdue"), total_issued]
+                ]
 
                 lines.append(
                     {
@@ -229,21 +230,21 @@ class AccountFollowupReport(models.AbstractModel):
                 "class": "total",
                 "level": 3,
                 "columns": [
-                               {"name": "", "template": "account_followup.line_template"}
-                               for _ in range(3)
-                           ]
-                           + [
-                               {
-                                   "name": _("Total"),
-                                   "style": "text-align:right; font-weight: bold;background:#ccc;",
-                                   "template": "account_followup.line_template",
-                               },
-                               {
-                                   "name": total_converted_str,
-                                   "style": "text-align:right; font-weight: bold;background:#ccc;",
-                                   "template": "account_followup.line_template",
-                               },
-                           ],
+                    {"name": "", "template": "account_followup.line_template"}
+                    for _ in range(3)
+                ]
+                + [
+                    {
+                        "name": _("Total"),
+                        "style": "text-align:right; font-weight: bold;background:#ccc;",
+                        "template": "account_followup.line_template",
+                    },
+                    {
+                        "name": total_converted_str,
+                        "style": "text-align:right; font-weight: bold;background:#ccc;",
+                        "template": "account_followup.line_template",
+                    },
+                ],
             }
             lines.append(total_line)
         return lines
