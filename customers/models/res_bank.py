@@ -6,4 +6,5 @@ class ResBank(models.Model):
     _description = 'Res Bank'
 
     branches = fields.Many2many('res.bank.branch', string="Branches", domain=lambda self: [('res_bank_id', '=', self.id)] )
+    test = 
 
