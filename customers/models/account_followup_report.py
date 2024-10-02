@@ -181,8 +181,7 @@ class AccountFollowupReport(models.AbstractModel):
                 ] + [
                     {
                         "name": v,
-                        "style": "text-align:right; white-space:normal;"
-                                 " font-weight: bold;",
+                        "style": "text-align:right; white-space:normal;",
                         "template": "account_followup.line_template",
                     }
                     for v in [_("Total Overdue"), total_issued]
