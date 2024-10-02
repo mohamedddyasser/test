@@ -9,15 +9,28 @@ jobs:
     steps:
       - name: Check out source repository
         uses: actions/checkout@v3
+
       - name: Set up Python environment
         uses: actions/setup-python@v3
         with:
           python-version: "3.10"
-      - name: flake8 Lint
-        uses: py-actions/flake8@v2
+
+      - name: Install flake8 and plugins
+        run: |
+          pip install flake8==5.0.4 flake8-bugbear==22.1.11 flake8-black
+
+      - name: Run flake8 with logging
+        run: |
+          # Run flake8 with verbose logging and output to log files
+          flake8 --ignore=B901,E203,E226,E302,E722,S101,S311,I004,N818,T002,T003,B006,W503,F504,F505,F506,F507,F522,F523,F524,BLK100,E \
+                 --exclude=.git,__pycache__,__init__.py,__manifest__.py \
+                 --max-line-length=88 . --verbose 2>flake8_error.log | tee flake8_output.log
+
+      - name: Upload logs if linting fails
+        if: failure()
+        uses: actions/upload-artifact@v3
         with:
-          ignore: "B901,E203,E226,E302,E722,S101,S311,I004,N818,T002,T003,B006,W503,F504,F505,F506,F507,F522,F523,F524,BLK100,E"
-          exclude: ".git,__pycache__,__init__.py,__manifest__.py"
-          max-line-length: "88"
-          path: "."
-          plugins: "flake8-bugbear==22.1.11 flake8-black"
+          name: flake8-logs
+          path: |
+            flake8_output.log
+            flake8_error.log
