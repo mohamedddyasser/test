@@ -25,7 +25,7 @@
                     <field name="bank_ids" invisible="1"/>
                     <field name="abra_bank_account_id" string="Abra Bank Account"
                            options="{'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"
-                           context="{'check_company_id': company_id}"/>
+                           context="{'check_company_id': True}"/>
                 </xpath>
                 <xpath expr="//field[@name='street']" position="attributes">
                     <attribute name="required">customer_rank == 1 or supplier_rank == 1</attribute>
