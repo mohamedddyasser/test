@@ -133,7 +133,10 @@ class AccountFollowupReport(models.AbstractModel):
                         "columns": [
                             isinstance(v, dict)
                             and v
-                            or {"name": v, "template": "account_followup.line_template"}
+                            or {
+                                "name": v,
+                                "template": "account_followup.line_template",
+                            }
                             for v in columns
                         ],
                     }
