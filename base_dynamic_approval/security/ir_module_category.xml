@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="dynamic_approval_category" model="ir.module.category">
+        <field name="name">Dynamic Approvals</field>
+    </record>
+
+</odoo>

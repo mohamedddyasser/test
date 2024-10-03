@@ -1,0 +1,273 @@
+<odoo>
+    <data>
+
+        <record id="customer_payment_report_pdf" model="ir.actions.report">
+            <field name="name">Customer Payment Report</field>
+            <field name="model">customer.payment.report</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">abra_customer_statement_report.customer_payment_report</field>
+            <field name="report_file">abra_customer_statement_report.customer_payment_report</field>
+            <field name="binding_type">report</field>
+        </record>
+
+
+
+         <template id="customer_payment_report">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+
+                    <div class="header" style="margin-bottom:50;margin-top:0px;width:100%;">
+
+
+                        <div style="width:100%;float:left;text-align:center">
+                            <b><span t-esc="request.env.user.company_id.display_name"/> </b>
+                            <br/>
+                            P.O. Box: <span t-esc="request.env.user.company_id.zip"/> <br/>
+                            <span t-if="request.env.user.company_id.street" t-esc="request.env.user.company_id.street"/>,
+                            <span t-if="request.env.user.company_id.city" t-esc="request.env.user.company_id.city"/>
+                            <span t-if="request.env.user.company_id.state_id" t-esc="request.env.user.company_id.state_id.name"/>
+                            <br/>
+
+                            <span t-if="request.env.user.company_id.country_id" t-esc="request.env.user.company_id.country_id.name"/> :
+                            <span t-if="request.env.user.company_id.city" t-esc="request.env.user.company_id.city"/>
+
+                            <br/>
+                            E-Mail : <span t-esc="request.env.user.company_id.email"/>
+
+                        </div>
+                    </div>
+
+                    <center><u><b>Payment Advice</b></u></center><br/>
+
+                     <div class="page" style="width:100%;font-size:12px;line-height:20px;">
+                            <div class="oe_structure">
+
+                    <t t-set="partner_id" t-value="request.env['res.partner'].search([('id','=',int(wizard_data[0]['partner_id']))])"/>
+
+                    <table style="width:100%;font-size:12px;">
+                                     <tr>
+
+                                    <td colspan="1" style="text-align:left;width:80%;">
+
+                                            <address>
+                                           <span t-esc="partner_id.display_name"/><br/>
+
+                                         <t t-if="partner_id.street"><t t-esc="partner_id.street"/><br/></t>
+
+                                            <t t-if="partner_id.street2"><t t-esc="partner_id.street2"/><br/></t>
+
+                                            <t t-if="partner_id.city or partner_id.state_id or partner_id.zip">
+                                                <t t-esc="partner_id.zip"/> <t t-esc="partner_id.city"/>
+                                                <t t-if="partner_id.state_id"><t t-esc="partner_id.state_id.name"/>,</t>
+                                                <br/>
+                                            </t>
+                                            <t t-if="partner_id.country_id"><t t-esc="partner_id.country_id.name"/></t>
+                                        </address>
+
+
+                                    </td>
+
+                                 <td colspan="1" style="text-align:left;width:20%;">
+                                    <b>Date:-  </b> <span t-esc="wizard_data[0]['date']"/>
+                                 </td>
+
+                             </tr>
+                        </table>
+                                Dear Sir/Madam,<br/>
+                                Please find below the payment details.
+
+                                <br/>
+                                <br/>
+                                <table style="width:100%;border-width:1px;border-color:black;font-size:14px;"
+                                    class="table table-sm table-bordered oe_inline"
+                                >
+
+<!--                                 <tr>-->
+
+<!--                                     <td colspan="4"-->
+<!--                                            style="text-align:center;border-width:1px;border-color:black;">-->
+<!--                                         <b>Payment Details</b>-->
+<!--                                     </td>-->
+<!--                                 </tr>-->
+
+                                    <tr>
+
+                                     <td colspan="1"
+                                            style="text-align:center;border-width:1px;border-color:black;">
+                                         <b>Bill Ref.</b>
+                                     </td>
+                                        <td colspan="1"
+                                            style="text-align:center;border-width:1px;border-color:black;">
+                                            <b>Bill Date</b>
+                                     </td>
+
+                                        <td colspan="1"
+                                            style="text-align:center;border-width:1px;border-color:black;">
+                                            <b>Amount</b>
+                                     </td>
+
+
+
+                                 </tr>
+
+
+                                    <tr t-foreach="account_move_date" t-as="line">
+
+                                     <td colspan="1"
+                                            style="text-align:center;border-width:1px;border-color:black;">
+                                         Agst Ref <span t-esc="line['name']"/>
+                                     </td>
+                                        <td colspan="1"
+                                            style="text-align:center;border-width:1px;border-color:black;">
+                                            <span t-esc="line['invoice_date']"/>
+                                     </td>
+
+                                        <td colspan="1"
+                                            style="text-align:center;border-width:1px;border-color:black;">
+                                            <span t-esc="line['amount_residual']"/>
+                                     </td>
+
+
+
+                                 </tr>
+
+
+
+
+                                </table>
+
+                                 <table style="width:100%;border-width:1px;border-color:black;font-size:14px;"
+                                    class="table table-sm table-bordered oe_inline"
+                                >
+
+                                 <tr>
+
+                                     <td colspan="4"
+                                            style="text-align:center;border-width:1px;border-color:black;">
+                                         <b>Payment Details</b>
+                                     </td>
+                                 </tr>
+
+                                     <tr>
+
+
+                                         <td colspan="1"
+                                            style="text-align:center;border-width:1px;border-color:black;">
+                                         <b>Payment Mode</b>
+                                     </td>
+                                         <td colspan="1"
+                                            style="text-align:center;border-width:1px;border-color:black;">
+                                         <b>Instrument Details </b>
+                                     </td>
+                                         <td colspan="1"
+                                            style="text-align:center;border-width:1px;border-color:black;">
+                                         <b>Issued From</b>
+                                     </td>
+
+                                         <td colspan="1"
+                                            style="text-align:center;border-width:1px;border-color:black;">
+                                         <b>Amount</b>
+                                     </td>
+                                 </tr>
+
+                                      <tr>
+
+
+                                         <td colspan="1"
+                                            style="text-align:center;border-width:1px;border-color:black;">
+                                         <span t-esc="wizard_data[0]['payment_mode']"/>
+                                     </td>
+                                         <td colspan="1"
+                                            style="text-align:center;border-width:1px;border-color:black;">
+                                         <span t-esc="wizard_data[0]['instrument_details']"/>
+                                     </td>
+                                         <td colspan="1"
+                                            style="text-align:center;border-width:1px;border-color:black;">
+                                         <span t-esc="wizard_data[0]['issued_from']"/>
+                                     </td>
+
+                                         <td colspan="1"
+                                            style="text-align:center;border-width:1px;border-color:black;">
+                                         <b><span t-esc="wizard_data[0]['total_amount']"/></b>
+                                     </td>
+                                 </tr>
+
+
+                                     <tr>
+
+
+                                         <td colspan="1"
+                                            style="text-align:center;border-width:1px;border-color:black;">
+                                         </td>
+                                         <td colspan="1"
+                                            style="text-align:center;border-width:1px;border-color:black;">
+                                         </td>
+                                         <td colspan="1"
+                                            style="text-align:center;border-width:1px;border-color:black;">
+                                            <b>Total</b>
+                                         </td>
+                                         <td colspan="1"
+                                            style="text-align:center;border-width:1px;border-color:black;">
+ <b><span t-esc="wizard_data[0]['total_amount_currency']"/></b>                                         </td>
+                                     </tr>
+
+
+                                 </table>
+                                <br/>
+                                <br/>
+
+                                Kindly acknowledge the receipt.<br/><br/>
+                                Thanking You<br/><br/><br/>
+
+                                 <table style="width:100%;font-size:14px;"
+                                >
+
+                                 <tr>
+
+                                     <td colspan="2"
+                                            style="text-align:left;height:3cm;">
+                                         <b>Authorised Signatory</b>
+                                     </td>
+
+                                     <td colspan="1"
+                                            style="text-align:right;height:3cm;">
+                                         <b>Receiver’s Signature</b>
+                                     </td>
+
+
+                                 </tr>
+
+                                      <tr>
+
+                                     <td colspan="1"
+                                            style="text-align:left;">
+                                         <b>Prepared by</b>
+                                     </td>
+
+                                     <td colspan="1"
+                                            style="text-align:right;">
+                                         <b>Checked by</b>
+                                     </td>
+
+                                          <td colspan="1"
+                                            style="text-align:right;">
+                                         <b>Verified by</b>
+                                     </td>
+
+
+                                 </tr>
+
+                                 </table>
+
+
+
+
+                    </div>
+                    </div>
+                </t>
+            </t>
+         </template>
+
+
+    </data>
+</odoo>

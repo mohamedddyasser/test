@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <template id="tier_validation_buttons">
+            <div>
+                <t t-if="state_field not in state_from">
+                    <button
+                            name="action_dynamic_approval_request"
+                            t-esc="custom_button_name"
+                            invisible="rejected or not need_validation"
+                            type="object" class="btn-primary" style="margin:0px,padding:0px"
+                            context="{'idd':active_id}"
+                    />
+                    <t t-if="model == 'account.batch.payment'">
+                        <button
+                                name="%(base_dynamic_approval.recall_dynamic_approval_wizard_action)d"
+                                id="recall"
+                                string="Recall"
+                                invisible="not dynamic_approve_request_ids or (not apply_recall or (state not in ['under_approval']))"
+                                type="action"/>
+                    </t>
+                    <t t-elif="model == 'account.move'">
+                        <button
+                                name="%(base_dynamic_approval.recall_dynamic_approval_wizard_action)d"
+                                id="recall"
+                                string="Recall"
+                                invisible="not dynamic_approve_request_ids or (not apply_recall or payment_state == 'paid')"
+                                type="action"/>
+
+                    </t>
+                    <t t-else="">
+                        <button
+                                name="%(base_dynamic_approval.recall_dynamic_approval_wizard_action)d"
+                                id="recall"
+                                string="Recall"
+                                invisible="not dynamic_approve_request_ids or not apply_recall"
+                                type="action"/>
+
+                    </t>
+                    />
+                </t>
+            </div>
+        </template>
+        <template id="tier_validation_label">
+            <div>
+                <field name="need_validation" invisible="1"/>
+                <field name="validated" invisible="1"/>
+                <field name="rejected" invisible="1"/>
+                <field name="apply_recall" invisible="1"/>
+                <div class="alert alert-warning"
+                     role="alert"
+                     invisible="validated or (rejected or not dynamic_approve_request_ids)"
+                     style="margin-bottom:0px;">
+                    <t t-if="state_field not in state_from">
+                        <p>
+                            <i class="fa fa-info-circle"/>
+                            This Record needs to be
+                            validated.
+                            <field name="dynamic_approve_pending_group" invisible="1"/>
+                            <button
+                                    name="%(base_dynamic_approval.approve_dynamic_approval_wizard_action)d"
+                                    string="Validate"
+                                    invisible="dynamic_approve_pending_group == False"
+                                    type="action"
+                                    class="oe_inline oe_button btn-success"
+                                    icon="fa-thumbs-up"
+                                    id="approve"
+                                    context="{'is_without_signature': context.get('is_without_signature',False)}"
+                            />
+                            <button
+                                    name="%(base_dynamic_approval.reject_dynamic_approval_wizard_action)d"
+                                    string="Reject"
+                                    invisible="dynamic_approve_pending_group == False"
+                                    type="action"
+                                    class="btn-icon btn-danger"
+                                    icon="fa-thumbs-down"
+                                    id="reject"
+                            />
+                            <br/>
+                            <field name="next_review" readonly="1"/>
+                        </p>
+                    </t>
+                </div>
+                <div class="alert alert-success"
+                     role="alert"
+                     invisible="not validated or not dynamic_approve_request_ids"
+                     style="margin-bottom:0px;">
+                    <t t-if="state_field not in state_from">
+                        <p>
+                            <i class="fa fa-thumbs-up"/>
+                            Operation has been
+                            <b>validated</b>
+                            !
+                        </p>
+                    </t>
+                </div>
+                <div class="alert alert-danger"
+                     role="alert"
+                     invisible="not rejected or not dynamic_approve_request_ids"
+                     style="margin-bottom:0px;">
+                    <t t-if="state_field not in state_from">
+                        <p>
+                            <i class="fa fa-thumbs-down"/>
+                            Operation has been
+                            <b>rejected</b>
+                            .
+                        </p>
+                    </t>
+                </div>
+            </div>
+        </template>
+        <template id="approval_page">
+            <t t-if="model == 'account.move'">
+                <page name="dynamic_approval" string="Approvals"
+                      invisible="dynamic_approve_request_ids == [] or move_type != 'out_invoice'">
+                    <group>
+                        <field name="dynamic_approval_id" groups="base.group_no_one" readonly="1"/>
+                        <field name="approve_requester_id" groups="base.group_no_one" readonly="1"/>
+                        <field name="hr_officer" readonly="1"/>
+                    </group>
+                    <field name="dynamic_approve_request_ids" readonly="1" style="pointer-events:none;">
+                        <tree decoration-success="status == 'approved'"
+                              decoration-warning="status == 'pending'"
+                              decoration-danger="status == 'rejected'"
+                              decoration-info="status == 'new'">
+                            <field name="status"/>
+                            <field name="user_id"/>
+                            <field name="group_id"/>
+                            <field name="approve_date"/>
+                            <field name="approve_note"/>
+                            <field name="reject_date"/>
+                            <field name="reject_reason"/>
+                            <field name="approve_signature" class="oe_avatar" widget="image"/>
+                        </tree>
+                    </field>
+                    r
+                </page>
+            </t>
+            <t t-elif="model == 'account.batch.payment'">
+                <page name="dynamic_approval" string="Approvals"
+                      invisible="dynamic_approve_request_ids == []">
+                    <group>
+                        <field name="dynamic_approval_id" groups="base.group_no_one" readonly="1"/>
+                        <field name="approve_requester_id" groups="base.group_no_one" readonly="1"/>
+                        <field name="hr_officer" readonly="1"/>
+                    </group>
+                    <field name="dynamic_approve_request_ids" readonly="1" style="pointer-events:none;">
+                        <tree decoration-success="status == 'approved'"
+                              decoration-warning="status == 'pending'"
+                              decoration-danger="status == 'rejected'"
+                              decoration-info="status == 'new'">
+                            <field name="status"/>
+                            <field name="user_id"/>
+                            <field name="group_id"/>
+                            <field name="approve_date"/>
+                            <field name="approve_note"/>
+                            <field name="reject_date"/>
+                            <field name="reject_reason"/>
+                            <field name="approve_signature" class="oe_avatar" widget="image"/>
+                        </tree>
+                    </field>
+                    r
+                </page>
+            </t>
+        </template>
+        <template id="approval_notebook">
+            <notebook>
+                <t t-if="model == 'account.move'">
+                    <page name="dynamic_approval" string="Approvals"
+                          invisible="dynamic_approve_request_ids == [] or move_type != 'out_invoice'">
+                        <field name="dynamic_approve_request_ids" readonly="1" style="pointer-events:none;">
+                            <tree decoration-success="status == 'approved'"
+                                  decoration-warning="status == 'pending'"
+                                  decoration-danger="status == 'rejected'"
+                                  decoration-info="status == 'new'">
+                                <field name="status"/>
+                                <field name="user_id"/>
+                                <field name="group_id"/>
+                                <field name="approve_date"/>
+                                <field name="approve_note"/>
+                                <field name="reject_date"/>
+                                <field name="reject_reason"/>
+                                <field name="approve_signature" class="oe_avatar" widget="image"/>
+                            </tree>
+                        </field>
+                    </page>
+                </t>
+                <t t-elif="model == 'account.batch.payment'">
+                    <page name="dynamic_approval" string="Approvals"
+                          invisible="dynamic_approve_request_ids == []">
+                        <field name="dynamic_approve_request_ids" readonly="1" style="pointer-events:none;">
+                            <tree decoration-success="status == 'approved'"
+                                  decoration-warning="status == 'pending'"
+                                  decoration-danger="status == 'rejected'"
+                                  decoration-info="status == 'new'">
+                                <field name="status"/>
+                                <field name="user_id"/>
+                                <field name="group_id"/>
+                                <field name="approve_date"/>
+                                <field name="approve_note"/>
+                                <field name="reject_date"/>
+                                <field name="reject_reason"/>
+                                <field name="approve_signature" class="oe_avatar" widget="image"/>
+                            </tree>
+                        </field>
+                    </page>
+                </t>
+            </notebook>
+        </template>
+        <template id="approval_type_template">
+            <group invisible="1">
+                <field name="approval_type" widget="radio"/>
+                <field name="alias_id" invisible="0"/>
+                <field name="alias_name" invisible="0"/>
+                <field name="alias_domain" invisible="0"/>
+            </group>
+        </template>
+    </data>
+</odoo>

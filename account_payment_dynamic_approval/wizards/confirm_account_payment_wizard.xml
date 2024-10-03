@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="confirm_account_payment_wizard_form" model="ir.ui.view">
+        <field name="name">confirm.account.payment.wizard.form</field>
+        <field name="model">confirm.account.payment.wizard</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <h3>
+                    <field name="name" readonly="1"/>
+                </h3>
+                <footer>
+                    <button string="Confirm"
+                            name="action_confirm_order"
+                            class="btn-primary"
+                            type="object"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="confirm_account_payment_wizard_action" model="ir.actions.act_window">
+        <field name="name">Confirm Order</field>
+        <field name="res_model">confirm.account.payment.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

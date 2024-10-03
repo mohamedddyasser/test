@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="action_batch_payment_xlsx_report1" model="ir.actions.report">
+        <field name="name">Batch Payment Report Excel 1</field>
+        <field name="model">account.batch.payment</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">intalio_batch_payment_reports.report_batch_payment_xlsx1</field>
+        <field name="report_file">intalio_batch_payment_reports.report_batch_payment_xlsx1</field>
+        <field name="print_report_name">'Account Batch Payment Excel Report'</field>
+        <field name="attachment_use">False</field>
+        <field name="binding_model_id" ref="account_batch_payment.model_account_batch_payment"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_batch_payment_xlsx_report2" model="ir.actions.report">
+        <field name="name">Batch Payment Report Excel 2</field>
+        <field name="model">account.batch.payment</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">intalio_batch_payment_reports.report_batch_payment_xlsx2</field>
+        <field name="report_file">intalio_batch_payment_reports.report_batch_payment_xlsx2</field>
+        <field name="print_report_name">'Account Batch Payment Excel Report'</field>
+        <field name="attachment_use">False</field>
+        <field name="binding_model_id" ref="account_batch_payment.model_account_batch_payment"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_batch_payment_xlsx_report3" model="ir.actions.report">
+        <field name="name">Batch Payment Report Excel 3</field>
+        <field name="model">account.batch.payment</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">intalio_batch_payment_reports.report_batch_payment_xlsx3</field>
+        <field name="report_file">intalio_batch_payment_reports.report_batch_payment_xlsx3</field>
+        <field name="print_report_name">'Account Batch Payment Excel Report'</field>
+        <field name="attachment_use">False</field>
+        <field name="binding_model_id" ref="account_batch_payment.model_account_batch_payment"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

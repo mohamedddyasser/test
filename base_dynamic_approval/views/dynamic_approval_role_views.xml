@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="dynamic_approval_role_form" model="ir.ui.view">
+        <field name="name">dynamic.approval.role.form</field>
+        <field name="model">dynamic.approval.role</field>
+        <field name="arch" type="xml">
+            <form string="Role">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="short_code"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="dynamic_approval_role_tree" model="ir.ui.view">
+        <field name="name">dynamic.approval.role.tree</field>
+        <field name="model">dynamic.approval.role</field>
+        <field name="arch" type="xml">
+            <tree string="Role">
+                <field name="short_code"/>
+                <field name="name"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="dynamic_approval_role_search" model="ir.ui.view">
+        <field name="name">dynamic.approval.role.search</field>
+        <field name="model">dynamic.approval.role</field>
+        <field name="arch" type="xml">
+            <search string="Search Role">
+                <field name="name" filter_domain="['|', ('name','ilike',self), ('short_code','ilike',self)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="dynamic_approval_role_action" model="ir.actions.act_window">
+        <field name="name">Approval Role</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">dynamic.approval.role</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="dynamic_approval_role_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Register a approval role
+            </p>
+            <p>
+                Approval role is a used to advanced set user for any document you have based on customization in each
+                document.
+            </p>
+        </field>
+    </record>
+
+</odoo>

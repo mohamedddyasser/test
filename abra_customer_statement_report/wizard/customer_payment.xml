@@ -1,0 +1,57 @@
+<odoo>
+    <data>
+
+
+        <record id="form_view_customer_payment_report" model="ir.ui.view">
+            <field name="name">name.customer.payment.report.form</field>
+            <field name="model">customer.payment.report</field>
+            <field name="arch" type="xml">
+                <form string="Customer payment Report">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="partner_id" required="1"/>
+                                <field name="payment_mode"/>
+                                <field name="issued_from"/>
+                            </group>
+                             <group>
+                                 <field name="date"/>
+                                 <field name="instrument_details"/>
+                            </group>
+                            <field name="account_move_ids" domain="[('partner_id','=',partner_id),('state','=','posted'),('amount_residual','>',0),('move_type','=','out_invoice')]">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="invoice_date"/>
+                                    <field name="amount_residual"/>
+                                </tree>
+                            </field>
+
+
+                        </group>
+
+                        <footer>
+                            <button name="button_print" type="object" string="Print"
+                                    class="oe_highlight"/>
+                            <button string="Cancel" class="btn-default" special="cancel"/>
+
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_customer_payment_report" model="ir.actions.act_window">
+            <field name="name">Customer payment Report</field>
+            <field name="res_model">customer.payment.report</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+
+        <!-- This Menu Item must have a parent and an action -->
+<!--        <menuitem id="menu_customer_payment_report" name="Customer payment Report"-->
+<!--                  parent="account.account_reports_legal_statements_menu" action="action_customer_payment_report" sequence="3"/>-->
+
+    </data>
+</odoo>

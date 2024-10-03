@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Template for the Invoice Analysis Dashboard with a year filter and chart width -->
+<templates>
+    <t t-name="InvoiceAnalysisDashboardMain">
+        <div class="o_control_panel">
+            <div class="container-fluid">
+                <div class="row mt-5">
+                    <!-- Year Filter Dropdown -->
+                    <div class="col-sm-12 col-md-3">
+                        <label for="year_filter">Select Year:</label>
+                        <select id="year_filter" class="form-control" t-on-change="onYearChange">
+                            <t t-foreach="state.availableYears" t-as="year" t-key="year">
+                                <option t-att-value="year">
+                                    <t t-esc="year"/>
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+
+                    <!-- Line Chart -->
+                    <div class="col-sm-12 col-md-9">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="invoice_line_chart_div chart-container card-shadow" style="width: 100%;">
+                                    <h2>Invoices Over Time</h2>
+                                    <hr/>
+                                    <div class="graph_canvas">
+                                        <canvas t-ref="invoice_line_chart_ref" class="invoice_line_chart" width="900" height="400"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

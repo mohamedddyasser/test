@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="model_view_batch_payment_form_inherited" model="ir.ui.view">
+            <field name="name">model_view_batch_payment_form_inherited</field>
+            <field name="model">account.batch.payment</field>
+            <field name="inherit_id" ref="account_batch_payment.view_batch_payment_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//header" position="replace">
+                    <!-- Add your fields or attributes here -->
+                    <header>
+                        <field name="state" invisible="1"/>
+                        <field name="id" invisible="1"/>
+                        <field name="file_generation_enabled" invisible="1"/>
+                        <button name="print_batch_payment" string="Print" type="object" invisible="state != 'sent'"/>
+                        <button name="action_reset_draft" string="Reset to Draft"
+                                type="object" invisible="state != 'cancel'"/>
+                        <!--                        <button name="validate_batch_button" string="Re-generate Export File" type="object"-->
+                        <!--                                invisible="not file_generation_enabled or state != 'sent' or not payment_ids"/>-->
+                        <!--                        <button name="validate_batch_button" class="oe_highlight" string="Validate" type="object"-->
+                        <!--                                invisible="state != 'draft' or not payment_ids"/>-->
+                        <field name="need_validation" invisible="1"/>
+                        <field name="original_state" widget="statusbar" statusbar_visible="draft,sent,reconciled"
+                               invisible="need_validation"/>
+                        <field name="dynamic_approval_state" widget="statusbar"
+                               statusbar_visible="draft,under_approval,sent,reconciled"
+                               invisible="not need_validation"/>
+                    </header>
+                </xpath>
+                <xpath expr="//field[@name='payment_method_id']" position="after">
+                    <field name="under_approval_check" invisible="1"/>
+                    <field name="cancel_check" invisible="1"/>
+                    <field name="confirm_check" invisible="1"/>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="server_action_batch_payment_under_approval" model="ir.actions.server">
+            <field name="name">Batch Payment Under Approval</field>
+            <field name="model_id" ref="account_batch_payment.model_account_batch_payment"/>
+            <field name="state">code</field>
+            <field name="code">
+                record.action_move_batch_payment_to_under_approval()
+            </field>
+        </record>
+
+        <record id="server_action_batch_payment_approve" model="ir.actions.server">
+            <field name="name">Batch Payment Post</field>
+            <field name="model_id" ref="account_batch_payment.model_account_batch_payment"/>
+            <field name="state">code</field>
+            <field name="code">
+                for rec in records:
+                action = rec.action_move_batch_payment_confirm()
+            </field>
+        </record>
+
+        <record id="server_action_batch_payment_recall" model="ir.actions.server">
+            <field name="name">Batch Payment Draft</field>
+            <field name="model_id" ref="account_batch_payment.model_account_batch_payment"/>
+            <field name="state">code</field>
+            <field name="code">
+                record.action_move_batch_payment_to_draft()
+            </field>
+        </record>
+
+        <record id="server_action_batch_payment_reject" model="ir.actions.server">
+            <field name="name">Batch Payment Cancel</field>
+            <field name="model_id" ref="account_batch_payment.model_account_batch_payment"/>
+            <field name="state">code</field>
+            <field name="code">
+                record.action_move_batch_payment_cancel()
+            </field>
+        </record>
+
+        <record model="ir.actions.server" id="account_batch_payment.action_account_create_batch_payment">
+            <field name="name">Create batch payment</field>
+            <field name="model_id" ref="account.model_account_payment"/>
+            <field name="binding_model_id" ref="account.model_account_payment"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    for rec in records:
+                        if rec.batch_payment_id:
+                            raise UserError("%s Already has Batch Payment." % rec.name)
+                    action = records.create_batch_payment()
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

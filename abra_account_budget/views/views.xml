@@ -1,0 +1,32 @@
+<odoo>
+  <data>
+
+
+
+    <!-- Inherit Form View to Modify it -->
+    <record id="form_view_crossovered_budget_inherit" model="ir.ui.view">
+        <field name="name">name.crossovered.budget.inherit.form</field>
+        <field name="model">crossovered.budget</field>
+        <field name="inherit_id" ref="account_budget.crossovered_budget_view_form"/>
+        <field name="arch" type="xml">
+
+
+            <xpath expr="//field[@name='crossovered_budget_line']//tree//field[@name='general_budget_id']" position="attributes">
+              <attribute name="optional">hide</attribute>
+              <attribute name="readonly">0</attribute>
+              <attribute name="force_save">True</attribute>
+              <attribute name="domain">[('id', '=', 0)]</attribute>
+              <attribute name="options">{'no_quick_create': True}</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='crossovered_budget_line']//tree//field[@name='general_budget_id']" position="after">
+              <field name="account_id" required="0" optional="hide"/>
+              <field name="code"/>
+            </xpath>
+
+        </field>
+    </record>
+
+
+  </data>
+</odoo>

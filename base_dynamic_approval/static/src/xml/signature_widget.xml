@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+    <t t-inherit="web.SignatureField" t-inherit-mode="extension" owl="1">
+        <xpath expr="//img" position="replace">
+            <t t-if="props.value and props.name == 'approve_signature_change'">
+                <img class="o_signature img img-fluid"
+                     alt="Binary file"
+                     t-att-src="getUrl"
+                     t-att-name="props.name"
+                     t-att-style="'margin-bottom:6px; display:none'"
+                     t-on-click="onClickSignature"
+                     t-on-error.stop="onLoadFailed"
+                />
+                <div class="o_signature o_signature_empty" t-att-style="sizeStyle" t-on-click="onClickSignature">
+                    <svg t-on-error.stop="onLoadFailed"></svg>
+                    <p>SIGNATURE</p>
+                </div>
+            </t>
+            <t t-else="">
+                <img class="o_signature img img-fluid"
+                     alt="Binary file"
+                     t-att-src="getUrl"
+                     t-att-name="props.name"
+                     t-att-style="sizeStyle"
+                     t-on-click="onClickSignature"
+                     t-on-error.stop="onLoadFailed"
+                />
+            </t>
+        </xpath>
+    </t>
+
+</templates>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="external_layout_boxed_inherited" inherit_id="web.external_layout_boxed">
+        <div t-attf-class="footer o_boxed_footer o_company_#{company.id}_layout" position="attributes">
+            <attribute name="t-attf-class" remove="o_boxed_footer" separator=" "/>
+        </div>
+        <xpath expr="//div[@t-field='company.report_footer']/.." position="attributes">
+            <attribute name="class" add="o_boxed_footer_inherited" separator=" "/>
+        </xpath>
+        <xpath expr="//div[@t-field='company.report_footer']/.." position="before">
+            <div class="text-center" style="margin-top: 200px; margin-bottom: 5px;">
+                This is a computer-generated document and does not require signatures.
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

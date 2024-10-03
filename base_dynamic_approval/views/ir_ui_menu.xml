@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+            id="dynamic_approval_root_menu"
+            name="Dynamic Approval"
+            sequence="300"
+            groups="base_dynamic_approval.dynamic_approval_admin_group"
+            web_icon="base_dynamic_approval,static/description/icon.png"
+    />
+
+    <menuitem
+            id="dynamic_approval_menu"
+            name="Approval Configuration"
+            parent="dynamic_approval_root_menu"
+            groups="base_dynamic_approval.dynamic_approval_admin_group"
+            action="base_dynamic_approval.dynamic_approval_action"
+            sequence="10"
+    />
+
+    <menuitem
+            id="dynamic_approval_request_menu"
+            name="Request Logs"
+            parent="dynamic_approval_root_menu"
+            groups="base_dynamic_approval.dynamic_approval_admin_group"
+            action="base_dynamic_approval.dynamic_approval_request_action"
+            sequence="100"
+    />
+
+</odoo>

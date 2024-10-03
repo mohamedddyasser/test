@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="approve_dynamic_approval_wizard_form" model="ir.ui.view">
+        <field name="name">approve.dynamic.approval.wizard.form.view</field>
+        <field name="model">approve.dynamic.approval.wizard</field>
+        <field name="inherit_id" ref="base_dynamic_approval.approve_dynamic_approval_wizard_form"/>
+        <field name="arch" type="xml">
+<!--            <xpath expr="//h3" position="after">-->
+<!--                <div name="approve_stamp" groups="user_approval_stamp.group_allow_approval_with_stamp">-->
+<!--                    <label for="stamp_id" string="Stamp"/>-->
+<!--                    <field name="stamp_id"/>-->
+<!--                    <div style="width:20%;">-->
+<!--                        <field name="approve_stamp" widget="image"-->
+<!--                               options='{"preview_image": "image", "size": [150, 150]}'/>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </xpath>-->
+            <xpath expr="//group" position="after">
+                <group name="approve_stamp" invisible="1" groups="user_approval_stamp.group_allow_approval_with_stamp">
+                    <field name="stamp_id" invisible="1" />
+                    <field name="approve_stamp" invisible="1"  string="Approved Stamp" widget="image" options="{&quot;preview_image&quot;: &quot;image&quot;, &quot;size&quot;: [150, 150]}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

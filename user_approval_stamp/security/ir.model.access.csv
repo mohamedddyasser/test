@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_user_stamp,user_stamp,model_user_stamp,user_approval_stamp.group_allow_approval_with_stamp,1,1,1,1

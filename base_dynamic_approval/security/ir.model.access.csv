@@ -1,0 +1,25 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_dynamic_approval_internal,access.dynamic.approval.internal,base_dynamic_approval.model_dynamic_approval,base.group_user,1,0,0,0
+access_dynamic_approval_user,access.dynamic.approval.user,base_dynamic_approval.model_dynamic_approval,base_dynamic_approval.dynamic_approval_admin_group,1,1,1,1
+
+access_dynamic_approval_condition_internal,access.dynamic.approval.condition,base_dynamic_approval.model_dynamic_approval_condition,base.group_user,1,0,0,0
+access_dynamic_approval_condition_user,access.dynamic.approval.condition.user,base_dynamic_approval.model_dynamic_approval_condition,base_dynamic_approval.dynamic_approval_admin_group,1,1,1,1
+
+access_dynamic_approval_level_internal,access.dynamic.approval.level,base_dynamic_approval.model_dynamic_approval_level,base.group_user,1,0,0,0
+access_dynamic_approval_level_user,access.dynamic.approval.level.user,base_dynamic_approval.model_dynamic_approval_level,base_dynamic_approval.dynamic_approval_admin_group,1,1,1,1
+
+access_dynamic_approval_request_internal,access.dynamic.approval.request.internal,base_dynamic_approval.model_dynamic_approval_request,base.group_user,1,1,1,1
+access_dynamic_approval_request_user,access.dynamic.approval.request.user,base_dynamic_approval.model_dynamic_approval_request,base_dynamic_approval.dynamic_approval_admin_group,1,1,1,1
+
+approve_dynamic_approval_wizard_user,approve.dynamic.approval.wizard.user,base_dynamic_approval.model_approve_dynamic_approval_wizard,base.group_user,1,1,1,1
+
+reject_dynamic_approval_wizard_user,reject.dynamic.approval.wizard.user,base_dynamic_approval.model_reject_dynamic_approval_wizard,base.group_user,1,1,1,1
+
+recall_dynamic_approval_wizard_user,recall.dynamic.approval.wizard.user,base_dynamic_approval.model_recall_dynamic_approval_wizard,base.group_user,1,1,1,1
+access_work_flow_select,work_flow_select,base_dynamic_approval.model_work_flow_select,,1,1,1,1
+base.access_ir_model_fields_user,ir_model_fields all,base.model_ir_model_fields,base.group_user,1,0,0,0
+
+access_dynamic_approval_role_user,access.dynamic.approval.role.user,base_dynamic_approval.model_dynamic_approval_role,base.group_user,1,0,0,0
+access_dynamic_approval_role_admin,access.dynamic.approval.role.admin,base_dynamic_approval.model_dynamic_approval_role,base_dynamic_approval.dynamic_approval_admin_group,1,1,1,1
+access_levels_dynamic_approval_wizard,levels.dynamic.approval.wizard,base_dynamic_approval.model_levels_dynamic_approval_wizard,,1,1,1,1
+access_dynamic_approval_level_wizard,dynamic.approval.level.wizard,base_dynamic_approval.model_dynamic_approval_level_wizard,,1,1,1,1

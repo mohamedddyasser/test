@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- Inherit Form View to Modify it -->
+        <record id="view_order_form_inherited_percentage" model="ir.ui.view">
+            <field name="name">view_order_form_inherited_percentage</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_order']" position="after">
+                    <field name="claim_percentage_remaining" invisible="1"/>
+                    <!-- Add your fields or attributes here -->
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

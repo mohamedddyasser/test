@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <record id="approve_dynamic_approval_wizard_form" model="ir.ui.view">
+        <field name="name">approve.dynamic.approval.wizard.form</field>
+        <field name="model">approve.dynamic.approval.wizard</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <label for="note" class="oe_edit_only"/>
+                        <h3>
+                            <field name="note"/>
+                        </h3>
+                    </group>
+                         <field name="signature"   widget="signature" invisible="context.get('is_without_signature',False)"  options="{'size': [100,100]}" />
+<!--                         <field name="signature"   widget="signature" invisible="1"  options="{'size': [100,100]}" />-->
+
+                    <footer>
+                        <button string="Approve and Sign" name="action_sign_order" class="btn-primary" type="object" invisible="context.get('is_without_signature',False)"/>
+<!--                        <button string="Approve" name="action_approve_order" class="btn-primary" type="object" invisible="not context.get('is_without_signature',False)"/>-->
+                        <button string="Approve Without Sign" name="action_approve_order" class="btn-primary" type="object" invisible="context.get('is_without_signature',False)"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+
+                  </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="approve_dynamic_approval_wizard_action" model="ir.actions.act_window">
+        <field name="name">Approve</field>
+        <field name="res_model">approve.dynamic.approval.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

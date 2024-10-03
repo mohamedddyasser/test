@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account_payment_form_inherit" model="ir.ui.view">
+        <field name="name">account.payment.form.inherit</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <!--            <xpath expr="//field[@name='payment_method_line_id']" position="after">-->
+            <!--                <field name="payment_method_id"/>-->
+            <!--            </xpath>-->
+
+
+            <!--            <xpath expr="//sheet" position="inside">-->
+            <!--                <notebook>-->
+            <!--                    <page name="approvers" string="Approvers">-->
+            <!--                        <field name="dynamic_approve_request_ids" readonly="1">-->
+            <!--                            <tree editable="bottom">-->
+            <!--                                <field name="sequence"/>-->
+            <!--                                <field name="user_id"/>-->
+            <!--                                <field name="group_id"/>-->
+            <!--                                <field name="approve_date"/>-->
+            <!--                                <field name="approve_note"/>-->
+            <!--                                <field name="reject_date"/>-->
+            <!--                                <field name="reject_reason"/>-->
+            <!--                                <field name="approve_signature" widget="signature"/>-->
+            <!--                                <field name="approve_stamp" widget="image"/>-->
+            <!--   account_payment_dynamic_approval                             <field name="status"/>-->
+            <!--                            </tree>-->
+            <!--                        </field>-->
+            <!--                    </page>-->
+            <!--                </notebook>-->
+            <!--            </xpath>-->
+            <xpath expr="//button[@name='action_cancel']" position="attributes">
+                <!--                <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ['draft',-->
+                <!--                    'sent','under_approval','posted']), ('id', '=', False)]}-->
+                <!--                </attribute>-->
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="header" position="inside">
+                <field name="is_dynamic_approval_requester" invisible="1"/>
+            </xpath>
+            <!--            <xpath expr="//header//button[@name='action_cancel']" position="before">-->
+            <!--                <field name="dynamic_approve_pending_group" invisible="1"/>-->
+            <!--                <field name="is_dynamic_approval_requester" invisible="1"/>-->
+
+            <!--                <field name="invisible_approval_request" invisible="1"/>-->
+            <!--                <button name="pre_action_dynamic_approval_request" string="Request Approval" type="object"-->
+            <!--                        class="btn-primary"-->
+            <!--                        attrs="{'invisible': ['|','|',('state', 'not in', ['under_approval']),('is_dynamic_approval_requester', '=', False),('invisible_approval_request', '=', True)]}"/>-->
+            <!--                <button name="%(base_dynamic_approval.approve_dynamic_approval_wizard_action)d" string="Approve"-->
+            <!--                        type="action"-->
+            <!--                        class="btn-primary"-->
+            <!--                        attrs="{'invisible':['|',('dynamic_approve_pending_group','=',False),('state','=','cancel')]}"/>-->
+            <!--            </xpath>-->
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="statusbar_visible">draft,under_approval,posted,sent</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_post']" position="attributes">
+
+                <attribute name="invisible">state not in ['approved'] or is_dynamic_approval_requester == False
+                </attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_post']" position="after">
+                <button name="action_post" string="Confirm" type="object" class="oe_highlight" groups="account.group_account_invoice"
+                        invisible="state != 'draft' or show_original_buttons == False"
+                        />
+
+                <button name="action_draft" string="Reset To Draft" type="object" class="btn btn-secondary"
+                        invisible="state not in ['posted', 'cancel'] or show_original_buttons == False"
+                        groups="account.group_account_invoice" />
+                <button name="action_cancel" string="Cancel" type="object" groups="account.group_account_invoice"
+                        invisible="state != 'draft' or show_original_buttons == False"/>
+
+
+
+            </xpath>
+            <!--            <xpath expr="//button[@name='action_draft']" position="attributes">-->
+            <!--                <attribute name="attrs">{'invisible': [('state', '=', 'draft')]}-->
+            <!--                </attribute>-->
+            <!--            </xpath>-->
+            <xpath expr="//field[@name='journal_id']" position="after">
+                <field name="show_original_buttons" invisible="1"/>
+
+                <field name="dynamic_approval_id" groups="base.group_no_one" invisible="1"/>
+                <field name="approve_requester_id" groups="base.group_no_one" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='payment_type']" position="attributes">
+                <attribute name="readonly">state != 'draft'
+                </attribute>
+            </xpath>
+            <!--            <xpath expr="//field[@name='partner_type']" position="attributes">-->
+            <!--                <attribute name="attrs">{'required': [('state', '=', 'under_approval'), ('payment_type', 'in',-->
+            <!--                    ('inbound', 'outbound'))], 'invisible': [('payment_type', 'not in', ('inbound', 'outbound'))]}-->
+            <!--                </attribute>-->
+            <!--            </xpath>-->
+
+            <!--            <xpath expr="//field[@name='partner_id']" position="attributes">-->
+            <!--                <attribute name="attrs">{'required': [('state', '=', 'under_approval'), ('payment_type', 'in',-->
+            <!--                    ('inbound', 'outbound'))], 'invisible': [('payment_type', 'not in', ('inbound', 'outbound'))]}-->
+            <!--                </attribute>-->
+            <!--            </xpath>-->
+
+            <xpath expr="//field[@name='partner_id'][1]" position="attributes">
+                <attribute name="required">state == 'draft' and payment_type in ['inbound', 'outbound']
+                </attribute>
+                <attribute name="invisible">
+                    partner_type != 'customer' or is_internal_transfer == True
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id'][2]" position="attributes">
+                <attribute name="required">
+                    state == 'draft' and payment_type in ['inbound', 'outbound']
+                </attribute>
+                <attribute name="invisible">
+                    partner_type != 'supplier' or is_internal_transfer == True
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='journal_id']" position="attributes">
+                <attribute name="invisible">amount == 0 and state != 'draft'
+                </attribute>
+            </xpath>
+
+            <!--            <xpath expr="//field[@name='move_id']" position="attributes">-->
+            <!--                <attribute name="attrs">{'required': [('state', 'not in', ('draft','cancel'))]}-->
+            <!--                </attribute>-->
+            <!--            </xpath>-->
+
+            <xpath expr="//field[@name='amount']" position="attributes">
+                <attribute name="readonly">state != 'draft'
+                </attribute>
+            </xpath>
+<!--            <xpath expr="//button[@name='action_cancel'][1]" position="attributes">-->
+<!--                <attribute name="invisible">1</attribute>-->
+<!--            </xpath>-->
+
+            <xpath expr="//button[@name='action_draft'][2]" position="attributes">
+                <attribute name="invisible">state != 'cancel' or show_original_buttons == True
+                </attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--    <record id="view_account_payment_invoice_form_inherit_to_approve" model="ir.ui.view">-->
+    <!--        <field name="name">account.payment.invoice.form.inherit.to.approve</field>-->
+    <!--        <field name="model">account.payment</field>-->
+    <!--        <field name="inherit_id" ref="account.view_account_payment_invoice_form"/>-->
+    <!--        <field name="priority">1000</field>-->
+    <!--        <field name="mode">primary</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <xpath expr="//header/button[@name='action_post']" position="replace">-->
+
+    <!--                <button string='Request To Approve' name="pre_action_dynamic_approval_request" type="object"-->
+    <!--                        class="btn-primary"/>-->
+    <!--            </xpath>-->
+    <!--            <xpath expr="//notebook" position="attributes">-->
+    <!--                <attribute name="invisible">1</attribute>-->
+
+    <!--            </xpath>-->
+    <!--            <xpath expr="//field[@name='dynamic_approval_id']" position="attributes">-->
+    <!--                <attribute name="invisible">1</attribute>-->
+
+    <!--            </xpath>-->
+
+    <!--        </field>-->
+    <!--    </record>-->
+
+    <record id="server_action_payment_under_approval" model="ir.actions.server">
+        <field name="name">Payment Under Approval</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="state">code</field>
+        <field name="code">
+            record.run_under_approval_action()
+        </field>
+    </record>
+
+    <record id="server_action_payment_approve" model="ir.actions.server">
+        <field name="name">Payment Post</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="state">code</field>
+        <field name="code">
+            record.action_post();record._reconcile()
+        </field>
+    </record>
+
+    <record id="server_action_payment_recall" model="ir.actions.server">
+        <field name="name">Payment Draft</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="state">code</field>
+        <field name="code">
+            record.action_draft()
+        </field>
+    </record>
+
+    <record id="server_action_payment_reject" model="ir.actions.server">
+        <field name="name">Payment Cancel</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="state">code</field>
+        <field name="code">
+            record.action_cancel()
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+
+    <!--Action Client-->
+    <record id="invoice_analysis_dashboard_action_client" model="ir.actions.client">
+        <field name="name">Invoice Analysis Dashboard</field>
+        <field name="tag">invoice_analysis_dashboard_main</field>
+    </record>
+
+    <!-- Menu     -->
+    <menuitem id="invoice_menu_open_dashboard" name="Invoice Analysis Dashboard"
+              action="invoice_analysis_dashboard_action_client"
+              parent="account.account_reports_management_menu"
+               sequence="2" />
+
+</odoo>

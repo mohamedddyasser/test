@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_abra_customer_statement_report,customer_statement_report,model_customer_statement_report,,1,1,1,1
+access_customer_payment_report,customer_payment_report,model_customer_payment_report,,1,1,1,1

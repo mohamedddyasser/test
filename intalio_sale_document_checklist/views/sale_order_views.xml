@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherited" model="ir.ui.view">
+        <field name="name">sale.order.form.inherited</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Required Documents" name="order_documents">
+                    <field name="document_checklist_ids" widget="one2many">
+                        <tree string="Sale Document Checklist Lines" editable="bottom">
+                            <field name="name"/>
+                            <field name="attachment_ids" widget="many2many_binary" string="Attachment"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_partner_inherited_form" model="ir.ui.view">
+            <field name="name">view_partner_inherited_form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='email']" position="after">
+                    <field name="check_soa_mail_sent" invisible="1"/>
+                </xpath>
+                <xpath expr="//form/sheet/div[@name='button_box']" position="before">
+                    <header>
+                        <button name="send_soa_from_vendor_mail" string="Send SOA From Vendor" class="btn-primary"
+                                type="object" invisible="active == False or check_soa_mail_sent"/>
+                        <button name="send_soa_from_vendor_mail" string="Re-Send SOA From Vendor" class="btn-secondary"
+                                type="object" invisible="active == False or not check_soa_mail_sent"/>
+                    </header>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

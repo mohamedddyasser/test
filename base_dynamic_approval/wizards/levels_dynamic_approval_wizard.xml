@@ -1,0 +1,28 @@
+<odoo>
+
+    <record id="levels_dynamic_approval_wizard_form" model="ir.ui.view">
+        <field name="name">levels.dynamic.approval.wizard.form</field>
+        <field name="model">levels.dynamic.approval.wizard</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <h3>
+                    <field name="name" readonly="1"/>
+                </h3>
+                    <field name="dynamic_approval_level_id">
+                        <tree editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="user_id"/>
+                            <field name="group_id"/>
+                        </tree>
+                    </field>
+                <footer>
+                    <button string="Confirm"
+                            name="action_set_approvers"
+                            class="btn-primary"
+                            type="object"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

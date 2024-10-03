@@ -1,0 +1,675 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <template id="external_layout_pdf_quote" inherit_id="web.neutralize_banner" primary="True">
+            <xpath expr='//body/div/span[@id="oe_neutralize_banner"]' position="replace">
+            </xpath>
+            <!--            <xpath expr='//div[@id="wrapwrap"]/header' position="replace">-->
+            <!--            </xpath>-->
+            <!--            <xpath expr='//div[@id="wrapwrap"]/footer' position="replace">-->
+            <!--            </xpath>-->
+        </template>
+
+
+        <template id="report_pdf_quote_document">
+            <t t-if="not o" t-set="o" t-value="doc"/>
+
+            <t t-if="not company">
+                <!-- Multicompany -->
+                <t t-if="company_id">
+                    <t t-set="company" t-value="company_id"/>
+                </t>
+                <t t-elif="o and 'company_id' in o and o.company_id.sudo()">
+                    <t t-set="company" t-value="o.company_id.sudo()"/>
+                </t>
+                <t t-else="else">
+                    <t t-set="company" t-value="res_company"/>
+                </t>
+            </t>
+            <t t-set="doc" t-value="doc.with_context(lang=doc.partner_id.lang)"/>
+            <t t-set="doc_arabic" t-value="doc.with_context(lang='ar_001')"/>
+            <t t-set="forced_vat"
+               t-value="doc.fiscal_position_id.foreign_vat"/> <!-- So that it appears in the footer of the report instead of the company VAT if it's set -->
+            <t t-call="intalio_sale.external_layout_pdf_quote">
+                <div style="text-align: center;">
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                         style="max-height: 90px;margin-top:60px;"
+                         alt="Logo"/>
+                </div>
+                <div class="page">
+                    <div>
+                        <table class="table-borderless" style="border: none; width: 100%;font-size:16px;">
+                            <tr>
+                                <td style='border: none;text-align:left;border-top:none;border-bottom:none;width:25%;'>
+                                    <strong>Kind Attn.</strong>
+                                    <t t-if="doc.partner_id.parent_id">
+                                        <span>
+                                            <t t-esc="doc.partner_id.name"/>
+                                        </span>
+                                    </t>
+                                </td>
+                                <td style='border: none;text-align:right;width:30%;padding-right:20px;'>
+                                    <span>Quote No</span>
+                                    <span>
+                                        <t t-esc="doc.name.replace('S','')"/>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style='border: none;text-align:left;border-top:none;border-bottom:none;width:25%;'>
+                                </td>
+                                <td style='border: none;text-align:center;width:30%;'>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style='border: none;text-align:left;border-top:none;border-bottom:none;width:25%;'>
+                                    <strong>Messrs</strong>
+                                    <span>
+                                        <t t-esc="doc.partner_id.parent_id.name or doc.partner_id.name"/>
+                                    </span>
+                                </td>
+                                <td style='border: none;text-align:right;width:30%;padding-right:20px;'>
+                                    <span>Date</span>
+                                    <span>
+                                        <t t-esc="doc.date_order.date()"/>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                    <h2 class="mt-4">
+                        <span style="font-style:oblique;font-size:30px;">
+                            <t t-esc="'Q'+ ' ' +'U'+ ' ' +'O'+ ' ' +'T'+ ' ' +'A'+ ' ' +'T'+ ' ' +'I'+ ' ' +'O'+ ' ' +'N'"/>
+                        </span>
+                    </h2>
+                    <span style="font-weight:bold;font-size:16px;">With reference to your inquiry we are pleased to
+                        quote as
+                        follows:
+                    </span>
+                    <br/>
+                    <br/>
+                    <div>
+                        <table class="table-borderless" style="border: none; width: 20%;font-size:16px;">
+                            <tr>
+                                <td style='border: none;text-align:left;border-top:none;border-bottom:none;width:25%;font-weight:bold;'>
+                                    <span>Title</span>
+                                </td>
+                                <td style='border: none;text-align:center;width:70%;font-weight:bold;'>
+                                    <span>
+                                        <t t-esc="','.join(doc.tag_ids.mapped('name'))"/>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <table style=" text-align: center;width:100%;border-collapse: collapse;font-size:14px;">
+                            <tr style="font-weight: bold;font-size:16px;">
+                                <th style="width:10%;border: 1px solid black;text-align: center;padding-top:10px;">Ser.
+                                    No.
+                                </th>
+                                <th style="width:60%;border: 1px solid black;text-align:left;padding-top:10px;padding-left:5px;">
+                                    Details
+                                </th>
+                                <th style="width:10%;border: 1px solid black;text-align: center;padding-top:10px;">
+                                    Qty
+                                </th>
+                                <th style="width:10%;border: 1px solid black;text-align: center;padding-top:10px;">
+                                    Unit Cost AED
+                                </th>
+                                <th style="width:10%;border: 1px solid black;text-align: center;padding-top:10px;">
+                                    Total Amt AED
+                                </th>
+                            </tr>
+                            <t t-set="index" t-value="1"/>
+                            <t t-set="total" t-value="0"/>
+                            <t t-foreach="doc.order_line" t-as="line">
+                                <tr style="font-size:16px;">
+                                    <td style="border: 1px solid black;border-bottom:none;border-top:none;font-weight:bold;padding-top:10px;">
+                                        <span>
+                                            <t t-esc="index"/>
+                                        </span>
+                                    </td>
+                                    <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                        <p style="text-align:left;font-weight:bold;padding-top:10px;padding-left:5px;">
+                                            <t t-esc="line.name"/>
+                                        </p>
+                                        <img t-if="line.photo" t-att-src="image_data_uri(line.photo)"
+                                             style="max-height: 50px;"
+                                             alt="photo"/>
+                                    </td>
+                                    <td style="border: 1px solid black;border-bottom:none;border-top:none;padding-top:10px;">
+                                        <span>
+                                            <t t-esc="int(line.product_uom_qty)"/>
+                                        </span>
+                                    </td>
+                                    <td style="border: 1px solid black;border-bottom:none;border-top:none;padding-top:10px;">
+                                        <span>
+                                            <t t-esc="line.price_unit"/>
+                                        </span>
+                                    </td>
+                                    <td style="border: 1px solid black;border-bottom:none;border-top:none;padding-top:10px;">
+                                        <span>
+                                            <t t-esc="line.price_subtotal"/>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <t t-set="index" t-value="index + 1"/>
+                                <t t-set="total" t-value="total + line.price_subtotal"/>
+                            </t>
+                            <tr style="height:10px;">
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr style="height:10px;">
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr style="height:10px;text-align:left;font-weight:bold;font-size:16px;font-style:oblique;">
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+                                        General Terms :
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr style="text-align:left;font-size:16px;">
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+                                        <t t-esc="doc.note"/>
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr style="height:10px;">
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr style="height:10px;text-align:left;font-style:oblique;font-size:20px;">
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>Project Total</span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr style="height:10px;text-align:left;font-size:16px;">
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>Additional 5% VAT will be added in the final invoice if its applicable for
+                                        this
+                                        project.
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr style="height:10px;">
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr style="height:10px;">
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr style="height:10px;text-align:left;font-weight:bold;font-size:16px;">
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+                                        Terms:
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr style="text-align:left;font-size:16px;">
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;font-weight:bold;">
+                                    <span>
+                                        Validity
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <t t-if="(doc.validity_date - doc.date_order.date()).days >= 0">
+                                        <span>
+                                            <t t-esc="str((doc.validity_date - doc.date_order.date()).days) + ' days from quote date'"/>
+                                        </span>
+                                    </t>
+                                    <t t-else="">
+                                        <span>
+                                            <t t-esc="'0 days from quote date'"/>
+                                        </span>
+                                    </t>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr style="text-align:left;font-size:16px;">
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;font-weight:bold;">
+                                    <span>
+                                        Artworks
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+                                        <t t-esc="doc.artwork"/>
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr style="text-align:left;font-size:16px;">
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;font-weight:bold;">
+                                    <span>
+                                        Remarks
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+                                        <t t-esc="doc.remark"/>
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-top:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr style="font-weight:bold;font-size:16px;">
+                                <td colspan="4" style="border: 1px solid black;border-bottom:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;">
+                                    <span>
+                                        <t t-esc="total"/>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;border-bottom:none;border-right:none;">
+                                    <span>
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-left:none;border-right:none;">
+                                    <span>
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-left:none;border-right:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-left:none;border-right:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid black;border-bottom:none;border-left:none;">
+                                    <span>
+
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <table class="table-borderless" style="width: 100%;border: none;height:60px;">
+                            <tr>
+                                <th rowspan="2"
+                                    style="border: none;text-align:left;border-top:none;border-bottom:none;width:30%;">
+                                    <img t-if="doc.company_id.imagel" t-att-src="image_data_uri(doc.company_id.imagel)"
+                                         style="max-height: 120px;"
+                                         alt="Logo header"/>
+                                </th>
+                                <th style="border: none;text-align:right;border-top:none;border-bottom:none;width:35%;">
+                                    <div width='623'>
+                                        <span style="font-weight: bold;font-size:16px;">
+                                            <t t-esc="doc.company_id.name"/>
+                                        </span>
+                                    </div>
+                                    <div width='623'>
+                                        <span style="font-size:15px;">
+                                            <t t-esc="doc.company_id.street or doc.company_id.street2"/>
+                                            <t t-esc="doc.company_id.city"/>
+                                        </span>
+                                    </div>
+                                    <div width='623'>
+                                        <span style="font-size:15px;">
+                                            Post Box:
+                                            <t t-esc="doc.company_id.zip"/>
+                                            <t t-esc="doc.company_id.state_id.name"/>
+                                            <t t-esc="doc.company_id.country_id.name"/>
+                                        </span>
+                                    </div>
+                                </th>
+                                <th style="border: none;text-align:right;border-top:none;border-bottom:none;width:35%;font-size:15px;">
+                                    <span>
+                                        <t t-esc="doc.company_id.email"/>
+                                    </span>
+                                    <!--                            <span class="contact-icons">📧</span>-->
+                                    <br/>
+                                    <span>
+                                        <t t-esc="doc.company_id.phone"/>
+                                    </span>
+                                    <!--                            <i class="fa fa-solid fa-phone pe-2"/>-->
+                                    <br/>
+                                    <span>
+                                        <t t-esc="doc.company_id.mobile"/>
+                                    </span>
+                                    <br/>
+                                    <span>
+                                        <t t-esc="doc.company_id.website"/>
+                                    </span>
+                                    <!--                            <span class="contact-icons">🌐</span>-->
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="2" class="center-align"
+                                    style="border: none;text-align:left;border-top:none;border-bottom:none;width:35%;padding: 8px;">
+                                    <div style="border: 2px solid black;">
+                                        <table class="table-borderless"
+                                               style="border: none;font-size:11px;">
+                                            <tr>
+                                                <td style='border: none;text-align:left;border-top:none;border-bottom:none;width:50%;font-weight:bold;'>
+                                                    <span>
+                                                        <t t-esc="doc.company_id.company_info"/>
+                                                    </span>
+                                                </td>
+                                                <td style='border: none;text-align:right;width:50%;font-weight:bold;'>
+                                                    <span>
+                                                        <t t-esc="doc_arabic.company_id.company_info"/>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+
+        <template id="report_pdf_quote">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="intalio_sale.report_pdf_quote_document" t-lang="doc.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+
+        <record id="paperformat_without_header_footer" model="report.paperformat">
+            <field name="name">A4 Without Header, Footer</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+
+        <record id="sale.action_report_saleorder" model="ir.actions.report">
+            <field name="name">PDF Quote</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">intalio_sale.report_pdf_quote</field>
+            <field name="report_file">intalio_sale.report_pdf_quote</field>
+            <field name="print_report_name">'Order - %s' % (object.name)
+            </field>
+            <field name="binding_model_id" ref="model_sale_order"/>
+            <field name="paperformat_id" ref="intalio_sale.paperformat_without_header_footer"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

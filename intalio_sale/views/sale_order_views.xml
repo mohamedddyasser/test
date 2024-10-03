@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherited" model="ir.ui.view">
+        <field name="name">sale.order.form.inherited</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='tag_ids']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='analytic_account_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//group[@name='partner_details']" position="inside">
+                <field name="tag_ids" widget="many2many_tags" string="Quotation Category"
+                       options="{'color_field': 'color', 'no_create_edit': True}"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                <field name="analytic_account_id"
+                       context="{
+                       'default_partner_id':partner_invoice_id,
+                       'default_name':name,
+                       'default_plan_id': analytic_plan_id
+                       }"
+                       readonly="invoice_count != 0 and state == 'sale'" groups="analytic.group_analytic_accounting"
+                       force_save="1"/>
+                <field name="project_manager_id"/>
+                <field name="analytic_plan_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="artwork"/>
+                <field name="remark"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+            </xpath>
+            <xpath expr="//field[@name='date_order']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

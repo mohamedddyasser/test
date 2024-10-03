@@ -1,0 +1,46 @@
+<odoo>
+    <data>
+
+
+        <record id="form_view_customer_statement_report" model="ir.ui.view">
+            <field name="name">name.customer.statement.report.form</field>
+            <field name="model">customer.statement.report</field>
+            <field name="arch" type="xml">
+                <form string="Customer Statement Report">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="partner_id" required="1"/>
+                            </group>
+                             <group>
+                                 <field name="date"/>
+                                <field name="currency_ids" widget="many2many_tags"/>
+                            </group>
+                        </group>
+
+                        <footer>
+                            <button name="button_print" type="object" string="Print"
+                                    class="oe_highlight"/>
+                            <button string="Cancel" class="btn-default" special="cancel"/>
+
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_customer_statement_report" model="ir.actions.act_window">
+            <field name="name">Customer Statement Report</field>
+            <field name="res_model">customer.statement.report</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="menu_customer_statement_report" name="Customer Statement Report"
+                  parent="account.account_reports_legal_statements_menu" action="action_customer_statement_report" sequence="3"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_saleorder_document_inherited" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//span[@t-field='doc.payment_term_id.note']/.." position="after">
+            <p t-if="doc.artwork">
+                <span>Artwork:</span>
+                <span t-field="doc.artwork"/>
+            </p>
+            <p t-if="doc.remark">
+                <span>Remark:</span>
+                <span t-field="doc.remark"/>
+            </p>
+        </xpath>
+        <xpath expr="//th[@name='th_taxes']" position="replace"/>
+        <xpath expr="//td[@name='td_taxes']" position="replace"/>
+    </template>
+</odoo>

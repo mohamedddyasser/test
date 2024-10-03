@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <data noupdate="1">
+
+        <record id="mail_approval_alias_mail" model="ir.config_parameter">
+            <field name="key">mail.approvals.amail</field>
+            <field name="value">odootest</field>
+        </record>
+
+        <record id="mail_approval_domain_mail" model="ir.config_parameter">
+            <field name="key">mail.approvals.amail.domain</field>
+            <field name="value">eaa.gov.ae</field>
+        </record>
+
+    </data>
+
+</odoo>

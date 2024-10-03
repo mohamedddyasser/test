@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_mail_alias_form">
+        <field name="name">mail.alias.form</field>
+        <field name="model">mail.alias</field>
+        <field name="inherit_id" ref="mail.mail_alias_view_form"/>
+        <field name="arch" type="xml">
+            <field name="alias_parent_thread_id" position="after">
+                <field name="apply_dynamic_approval"/>
+            </field>
+        </field>
+    </record>
+</odoo>

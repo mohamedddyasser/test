@@ -1,0 +1,23 @@
+@font-face {
+  font-family: "majalla";
+  src: url(/asset_sign_report/static/fonts/majalla.ttf)
+    format("truetype");
+}
+``
+body {
+  font-family: "majalla" !important;
+}
+table.table-bordered{
+    border:1px solid black;
+    margin-top:20px;
+  }
+ table.table-bordered > thead > tr > th{
+    border:1px solid black;
+}
+table.table-bordered > tbody > tr > td{
+    border:1px solid black;
+}
+
+.footer{
+    border:1px solid gray;
+}

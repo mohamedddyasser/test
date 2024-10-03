@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="work_flow_select_form" model="ir.ui.view">
+        <field name="name">Work Flow Selection</field>
+        <field name="model">work.flow.select</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <field name="approval_id" domain="[('id','in',approval_ids)]"/>
+                        <field name="approval_ids" invisible="1" widget="many2many_tags"/>
+                        <field name="res_model" invisible="1"/>
+                        <field name="res_id" invisible="1" />
+                    </group>
+                    <footer>
+                        <button string="Apply" name="action_apply" class="btn-primary"
+                                type="object"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

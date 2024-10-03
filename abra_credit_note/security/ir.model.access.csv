@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_abra_credit_note_abra_credit_note,abra_credit_note.abra_credit_note,model_abra_credit_note_abra_credit_note,base.group_user,1,1,1,1

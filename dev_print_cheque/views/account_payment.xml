@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_account_payment_form_inherited_buttons" model="ir.ui.view">
+            <field name="name">view_account_payment_form_inherited_buttons</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account_check_printing.view_account_payment_form_inherited"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='print_checks']" position="replace">
+                    <button name="%(dev_print_cheque.action_report_print_cheque)d" class="oe_highlight"
+                            invisible="payment_method_code != 'check_printing' or state != 'posted' or is_move_sent"
+                            string="Print Check" type="action" data-hotkey="g"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

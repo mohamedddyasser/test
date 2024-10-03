@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="view_account_payment_search_inherit" model="ir.ui.view">
+        <field name="name">view_account_payment_search_inherit</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_search"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//filter[@name='state_posted']" position="after">
+                <filter string="Under Approval" name="under_approval_filter"
+                        domain="[('state','=','under_approval')]"/>
+                <!--                <filter string="Approved" name="approved_filter" domain="[('state','=','approved')]"/>-->
+                <filter string="No Activity" name="no_activity_filter" domain="[('activity_ids','=',False)]"/>
+                <filter string="Has Activity" name="activity_filter" domain="[('activity_ids','!=',False)]"/>
+
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <record id="view_account_move_filter_inherit" model="ir.ui.view">
+        <field name="name">view_account_move_filter_inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_move_filter"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//filter[@name='posted']" position="after">
+                <filter string="Under Approval" name="under_approval_filter"
+                        domain="[('state','=','under_approval')]"/>
+                <!--                <filter string="Approved" name="approved_filter" domain="[('state','=','approved')]"/>-->
+                <filter string="No Activity" name="no_activity_filter" domain="[('activity_ids','=',False)]"/>
+                <filter string="Has Activity" name="activity_filter" domain="[('activity_ids','!=',False)]"/>
+
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <record id="view_account_invoice_filter_inherit" model="ir.ui.view">
+        <field name="name">view_purchase_order_filter_inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//filter[@name='cancel']" position="after">
+                <filter string="Under Approval" name="under_approval_filter"
+                        domain="[('state','=','under_approval')]"/>
+                <!--                <filter string="Approved" name="approved_filter" domain="[('state','=','approved')]"/>-->
+                <filter string="No Activity" name="no_activity_filter" domain="[('activity_ids','=',False)]"/>
+                <filter string="Has Activity" name="activity_filter" domain="[('activity_ids','!=',False)]"/>
+
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <record id="group_advanced_accountant_access" model="res.groups">
+        <field name="name">Advanced Accountant Access</field>
+        <!--        <field name="category_id" ref="base.module_category_hidden"/>-->
+    </record>
+
+    <record id="view_move_form_add_payment_btn" model="ir.ui.view">
+        <field name="name">account.move.add.payment_btn</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+
+            <!--            <xpath expr="//field[@name='partner_id'][1]" position="replace">-->
+            <!--                <field name="partner_id" widget="res_partner_many2one" nolabel="1"-->
+            <!--                       context="{'res_partner_search_mode': (context.get('default_move_type', 'entry') in ('out_invoice', 'out_refund', 'out_receipt') and 'customer') or (context.get('default_move_type', 'entry') in ('in_invoice', 'in_refund', 'in_receipt') and 'supplier') or False,'show_address': 1, 'default_is_company': True, 'show_vat': True}"-->
+            <!--                       domain="[('type', '!=', 'private'), ('company_id', 'in', (False, company_id))]"-->
+            <!--                       options='{"always_reload": True, "no_quick_create": True}'-->
+            <!--                       attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund', 'out_receipt'))]}"/>-->
+
+            <!--                <field name="vendor_id1" widget="res_partner_many2one" nolabel="1"-->
+            <!--                       context="{'res_partner_search_mode': (context.get('default_move_type', 'entry') in ('out_invoice', 'out_refund', 'out_receipt') and 'customer') or (context.get('default_move_type', 'entry') in ('in_invoice', 'in_refund', 'in_receipt') and 'supplier') or False,'show_address': 1, 'default_is_company': True, 'show_vat': True}"-->
+            <!--                       domain="[('supplier_rank', '&gt;', '0'), ('type', '!=', 'private'), ('company_id', 'in', (False, company_id))]"-->
+            <!--                       options='{"always_reload": True, "no_quick_create": True}'-->
+            <!--                       attrs="{'invisible': [('move_type', 'not in', ('in_invoice', 'in_refund', 'in_receipt'))]}"/>-->
+
+            <!--                <field name="partner_id" />-->
+            <!--                <field name="vendor_id1"/>-->
+            <!--            </xpath>-->
+
+            <!--            <xpath expr="//field[@name='partner_id'][1]" position="replace">-->
+            <!--                <field name="partner_id" widget="res_partner_many2one" nolabel="1"-->
+            <!--                       context="{'res_partner_search_mode': (context.get('default_move_type', 'entry') in ('out_invoice', 'out_refund', 'out_receipt') and 'customer') or (context.get('default_move_type', 'entry') in ('in_invoice', 'in_refund', 'in_receipt') and 'supplier') or False,'show_address': 1, 'default_is_company': True, 'show_vat': True}"-->
+            <!--                       domain="[('type', '!=', 'private'), ('company_id', 'in', (False, company_id))]"-->
+            <!--                       options='{"always_reload": True, "no_quick_create": True}'-->
+            <!--                       invisible="move_type not in ['out_invoice', 'out_refund', 'out_receipt']"/>-->
+
+            <!--                <field name="partner_id2" widget="res_partner_many2one" nolabel="1"-->
+            <!--                       context="{'res_partner_search_mode': (context.get('default_move_type', 'entry') in ('out_invoice', 'out_refund', 'out_receipt') and 'customer') or (context.get('default_move_type', 'entry') in ('in_invoice', 'in_refund', 'in_receipt') and 'supplier') or False,'show_address': 1, 'default_is_company': True, 'show_vat': True}"-->
+            <!--                       domain="[('supplier_rank', '&gt;', '0'), ('type', '!=', 'private'), ('company_id', 'in', (False, company_id))]"-->
+            <!--                       options='{"always_reload": True, "no_quick_create": True}'-->
+            <!--                       invisible="move_type not in ['in_invoice', 'in_refund', 'in_receipt']"/>-->
+
+            <!--            </xpath>-->
+
+
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <field name="show_original_buttons" invisible="1"/>
+                <field name="payment_counter" invisible="1"/>
+                <!--                <field name="register_payment_invisible" invisible="1"/>-->
+<!--                <button name="get_payments_created" class="oe_stat_button" icon="fa-dollar" type="object"-->
+<!--                        invisible="payment_counter == 0">-->
+<!--                    <field string="Unreconciled Payments" name="payment_counter" widget="statinfo"/>-->
+<!--                </button>-->
+<!--                <field name="reconciled_payments_count" invisible="1"/>-->
+<!--                <button name="get_payments_reconciled" class="oe_stat_button" icon="fa-dollar" type="object"-->
+<!--                        invisible="reconciled_payments_count == 0">-->
+<!--                    <field string="Reconciled Payments" name="reconciled_payments_count" widget="statinfo"-->
+<!--                    />-->
+<!--                </button>-->
+                <!--                <field name="registered_payments_count" invisible="1"/>-->
+                <!--                <button name="get_registered_payments" class="oe_stat_button" icon="fa-dollar" type="object"-->
+                <!--                        invisible="registered_payments_count == 0"-->
+                <!--                >-->
+                <!--                    <field string="Registered Payments" name="registered_payments_count" widget="statinfo"-->
+                <!--                    />-->
+                <!--                </button>-->
+                <!--                <button name="test" type="object" string="ObjectButton"/>-->
+
+            </xpath>
+            <!--            <xpath expr="//button[@name='action_register_payment']" position="attributes">-->
+            <!--                <attribute name="attrs">{'invisible': ['|', '|', ('register_payment_invisible', '=', True),-->
+            <!--                    ('state', '!=', 'posted'),('move_type', 'not in',-->
+            <!--                    ('out_invoice', 'out_refund', 'in_invoice', 'in_refund', 'out_receipt', 'in_receipt'))]}-->
+            <!--                </attribute>-->
+            <!--            </xpath>-->
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='partner_id']" position="attributes">
+                <attribute name="string">Vendor/Employee</attribute>
+            </xpath>
+
+            <!--            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='tax_ids']" position="attributes">-->
+            <!--                <attribute name="required">1</attribute>-->
+            <!--            </xpath>-->
+
+            <xpath expr="//field[@name='invoice_date']" position="attributes">
+                <attribute name="required">move_type not in ['entry']
+                </attribute>
+                <attribute name="invisible">
+                    move_type in ['entry']
+                </attribute>
+            </xpath>
+
+            <xpath expr="header" position="inside">
+                <field name="is_dynamic_approval_requester" invisible="1"/>
+            </xpath>
+
+            <!--            <xpath expr="//field[@name='state']" position="attributes">-->
+            <!--                <attribute name="statusbar_visible">draft,under_approval,posted,sent</attribute>-->
+            <!--            </xpath>-->
+
+            <xpath expr="//field[@name='state']" position="replace">
+                <field name="state" widget="statusbar" invisible="1"/>
+                <field name="need_validation" invisible="1"/>
+                <field name="dynamic_approve_request_ids" invisible="1"/>
+                <field name="original_state" widget="statusbar" statusbar_visible="draft,posted"
+                       invisible="need_validation"/>
+                <field name="dynamic_approval_state" widget="statusbar" statusbar_visible="draft,under_approval,posted"
+                       invisible="not need_validation or move_type == 'entry'"/>
+            </xpath>
+
+            <!--            <xpath expr="//field[@name='state']" position="after">-->
+            <!--                <field name="state2" statusbar_visible="draft,posted" widget="statusbar"-->
+            <!--                       invisible="move_type != 'entry'"/>-->
+            <!--            </xpath>-->
+            <!--            <xpath expr="//button[@name='action_post']" position="attributes">-->
+            <!--                <attribute name="attrs">{'invisible': ['|',('state', 'not in',-->
+            <!--                    ['approved']),('is_dynamic_approval_requester', '=', False)]}-->
+            <!--                </attribute>-->
+            <!--                <attribute name="invisible">1</attribute>-->
+            <!--            </xpath>-->
+
+
+            <xpath expr="//button[@name='action_post'][1]" position="attributes">
+                <attribute name="invisible">
+                    show_original_buttons == False or (need_validation == True or (hide_post_button == True or move_type != 'entry'))
+                </attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_post'][2]" position="attributes">
+                <attribute name="invisible">
+                    show_original_buttons == False or (need_validation == True or (hide_post_button == True or (move_type in ['entry', 'out_refund'] or
+                    display_inactive_currency_warning == True)))
+                </attribute>
+            </xpath>
+            <xpath expr="//button[@name='button_cancel'][1]" position="attributes">
+                <attribute name="invisible">
+                    show_original_buttons == False or (need_validation == True or (id == False or (state != 'draft' or move_type != 'entry')))
+                </attribute>
+            </xpath>
+            <xpath expr="//button[@name='button_cancel'][2]" position="attributes">
+                <attribute name="invisible">
+                    show_original_buttons == False or (need_validation == True or (id == False or (state != 'draft' or move_type in ['entry', 'out_refund'])))
+                </attribute>
+            </xpath>
+
+            <!--            <xpath expr="//button[@name='button_draft'][0]" position="attributes">-->
+            <!--                <attribute name="attrs">{'invisible': ["|", "&amp;", ("state", "!=", "cancel"), ("move_type", "!=", "entry"), "&amp;", ("state", "=", "draft"), ("move_type", "=", "entry")]}-->
+            <!--                </attribute>-->
+            <!--            </xpath>-->
+
+            <xpath expr="//button[@name='button_draft'][1]" position="attributes">
+                <attribute name="invisible">
+                    not show_reset_to_draft_button or (need_validation or dynamic_approve_request_ids)
+<!--                    state != 'cancel' or (dynamic_approve_request_ids != False or (move_type != 'entry' and (state == 'draft' and move_type == 'entry')))-->
+                </attribute>
+<!--                <attribute name="groups">account_payment_dynamic_approval.group_advanced_accountant_access</attribute>-->
+
+            </xpath>
+
+
+        </field>
+    </record>
+
+    <record id="server_action_move_under_approval" model="ir.actions.server">
+        <field name="name">Move Under Approval</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="state">code</field>
+        <field name="code">
+            record.write({'state': 'under_approval'})
+        </field>
+    </record>
+
+    <record id="server_action_move_approve" model="ir.actions.server">
+        <field name="name">Move Post</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="state">code</field>
+        <field name="code">
+            record.action_post()
+        </field>
+    </record>
+
+    <record id="server_action_move_recall" model="ir.actions.server">
+        <field name="name">Move Draft</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="state">code</field>
+        <field name="code">
+            record.button_draft()
+        </field>
+    </record>
+
+    <record id="server_action_move_reject" model="ir.actions.server">
+        <field name="name">Move Cancel</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="state">code</field>
+        <field name="code">
+            record.button_cancel()
+        </field>
+    </record>
+</odoo>

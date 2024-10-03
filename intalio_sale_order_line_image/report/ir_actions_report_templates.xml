@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_saleorder_inherit" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//th[@name='th_description']" position="after">
+            <th name="th_photo">Photo</th>
+        </xpath>
+        <xpath expr="//td[@name='td_name']" position="after">
+            <td name="td_photo" style="height: 20px !important; width: 20px !important;">
+                <span t-if="line.photo" t-field="line.photo" t-options='{"widget": "image"}'/>
+            </td>
+        </xpath>
+    </template>
+</odoo>
