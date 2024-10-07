@@ -1,0 +1,23 @@
+name: Example
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  comment:
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create Radon's reports
+        run: |
+          radon cc src/ -j >cc.json
+          radon mi src/ -j >mi.json
+          radon hal src/ -j >hal.json
+      - name: Comment the results on the PR
+        uses: Libra-foundation/radon-comment@V1.0
+        with:
+          cc: "cc.json"
+          mi: "mi.json"
+          hal: "hal.json"
