@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields
 
+
 class DynamicApprovalRole(models.Model):
-    _name = 'dynamic.approval.role'
-    _description = 'Approval Role'
-    _rec_name = 'short_code'
+    _name = "dynamic.approval.role"
+    _description = "Approval Role"
+    _rec_name = "short_code"
 
     short_code = fields.Char(
         required=True,
@@ -17,7 +18,7 @@ class DynamicApprovalRole(models.Model):
     )
 
     def get_approval_user(self, model, res):
-        """ return approval user
-            this function can be override to add custom users based on each model
+        """return approval user
+        this function can be override to add custom users based on each model
         """
-        return self.env['res.users']
+        return self.env["res.users"]

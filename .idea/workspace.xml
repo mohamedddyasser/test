@@ -5,7 +5,124 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6bdabc75-65f1-42a6-b661-1c99235f27c4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/abra_account_budget/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/abra_account_budget/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abra_account_budget/models/crossovered_budget.py" beforeDir="false" afterPath="$PROJECT_DIR$/abra_account_budget/models/crossovered_budget.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abra_accounting_enhanecment/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/abra_accounting_enhanecment/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abra_accounting_enhanecment/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/abra_accounting_enhanecment/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abra_accounting_enhanecment/controllers/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/abra_accounting_enhanecment/controllers/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abra_accounting_enhanecment/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/abra_accounting_enhanecment/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abra_accounting_enhanecment/models/account_move.py" beforeDir="false" afterPath="$PROJECT_DIR$/abra_accounting_enhanecment/models/account_move.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abra_accounting_enhanecment/models/account_move_line.py" beforeDir="false" afterPath="$PROJECT_DIR$/abra_accounting_enhanecment/models/account_move_line.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abra_accounting_enhanecment/models/account_payment.py" beforeDir="false" afterPath="$PROJECT_DIR$/abra_accounting_enhanecment/models/account_payment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abra_accounting_enhanecment/models/res_company.py" beforeDir="false" afterPath="$PROJECT_DIR$/abra_accounting_enhanecment/models/res_company.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abra_credit_note/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/abra_credit_note/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abra_credit_note/models/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/abra_credit_note/models/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abra_customer_statement_report/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/abra_customer_statement_report/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abra_customer_statement_report/models/account_move.py" beforeDir="false" afterPath="$PROJECT_DIR$/abra_customer_statement_report/models/account_move.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abra_customer_statement_report/wizard/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/abra_customer_statement_report/wizard/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abra_customer_statement_report/wizard/customer_payment.py" beforeDir="false" afterPath="$PROJECT_DIR$/abra_customer_statement_report/wizard/customer_payment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abra_customer_statement_report/wizard/customer_statement_wizard.py" beforeDir="false" afterPath="$PROJECT_DIR$/abra_customer_statement_report/wizard/customer_statement_wizard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account_payment_dynamic_approval/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/account_payment_dynamic_approval/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account_payment_dynamic_approval/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/account_payment_dynamic_approval/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account_payment_dynamic_approval/models/account_batch_payment.py" beforeDir="false" afterPath="$PROJECT_DIR$/account_payment_dynamic_approval/models/account_batch_payment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account_payment_dynamic_approval/models/account_move.py" beforeDir="false" afterPath="$PROJECT_DIR$/account_payment_dynamic_approval/models/account_move.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account_payment_dynamic_approval/models/account_payment.py" beforeDir="false" afterPath="$PROJECT_DIR$/account_payment_dynamic_approval/models/account_payment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account_payment_dynamic_approval/models/dynamic_approval.py" beforeDir="false" afterPath="$PROJECT_DIR$/account_payment_dynamic_approval/models/dynamic_approval.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account_payment_dynamic_approval/models/dynamic_approval_role.py" beforeDir="false" afterPath="$PROJECT_DIR$/account_payment_dynamic_approval/models/dynamic_approval_role.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account_payment_dynamic_approval/wizards/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/account_payment_dynamic_approval/wizards/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account_payment_dynamic_approval/wizards/confirm_account_payment_wizard.py" beforeDir="false" afterPath="$PROJECT_DIR$/account_payment_dynamic_approval/wizards/confirm_account_payment_wizard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/base_dynamic_approval/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/base_dynamic_approval/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/base_dynamic_approval/models/dynamic_approval.py" beforeDir="false" afterPath="$PROJECT_DIR$/base_dynamic_approval/models/dynamic_approval.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/base_dynamic_approval/models/dynamic_approval_condition.py" beforeDir="false" afterPath="$PROJECT_DIR$/base_dynamic_approval/models/dynamic_approval_condition.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/base_dynamic_approval/models/dynamic_approval_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/base_dynamic_approval/models/dynamic_approval_level.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/base_dynamic_approval/models/dynamic_approval_mixin.py" beforeDir="false" afterPath="$PROJECT_DIR$/base_dynamic_approval/models/dynamic_approval_mixin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/base_dynamic_approval/models/dynamic_approval_request.py" beforeDir="false" afterPath="$PROJECT_DIR$/base_dynamic_approval/models/dynamic_approval_request.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/base_dynamic_approval/models/dynamic_approval_role.py" beforeDir="false" afterPath="$PROJECT_DIR$/base_dynamic_approval/models/dynamic_approval_role.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/base_dynamic_approval/models/mail_alias.py" beforeDir="false" afterPath="$PROJECT_DIR$/base_dynamic_approval/models/mail_alias.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/base_dynamic_approval/models/mail_thread.py" beforeDir="false" afterPath="$PROJECT_DIR$/base_dynamic_approval/models/mail_thread.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/base_dynamic_approval/models/res_config_settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/base_dynamic_approval/models/res_config_settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/base_dynamic_approval/models/resource_calendar.py" beforeDir="false" afterPath="$PROJECT_DIR$/base_dynamic_approval/models/resource_calendar.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/base_dynamic_approval/wizards/approve_dynamic_approval_wizard.py" beforeDir="false" afterPath="$PROJECT_DIR$/base_dynamic_approval/wizards/approve_dynamic_approval_wizard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/base_dynamic_approval/wizards/levels_dynamic_approval_wizard.py" beforeDir="false" afterPath="$PROJECT_DIR$/base_dynamic_approval/wizards/levels_dynamic_approval_wizard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/base_dynamic_approval/wizards/recall_dynamic_approval_wizard.py" beforeDir="false" afterPath="$PROJECT_DIR$/base_dynamic_approval/wizards/recall_dynamic_approval_wizard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/base_dynamic_approval/wizards/reject_dynamic_approval_wizard.py" beforeDir="false" afterPath="$PROJECT_DIR$/base_dynamic_approval/wizards/reject_dynamic_approval_wizard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/base_dynamic_approval/wizards/work_flow_select.py" beforeDir="false" afterPath="$PROJECT_DIR$/base_dynamic_approval/wizards/work_flow_select.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/customers/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/customers/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/customers/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/customers/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/customers/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/customers/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/customers/models/account_types.py" beforeDir="false" afterPath="$PROJECT_DIR$/customers/models/account_types.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/customers/models/mail_activity.py" beforeDir="false" afterPath="$PROJECT_DIR$/customers/models/mail_activity.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/customers/models/res_bank.py" beforeDir="false" afterPath="$PROJECT_DIR$/customers/models/res_bank.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/customers/models/res_bank_branch.py" beforeDir="false" afterPath="$PROJECT_DIR$/customers/models/res_bank_branch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/customers/models/res_partner.py" beforeDir="false" afterPath="$PROJECT_DIR$/customers/models/res_partner.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/customers/models/res_partner_bank.py" beforeDir="false" afterPath="$PROJECT_DIR$/customers/models/res_partner_bank.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev_print_cheque/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/dev_print_cheque/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev_print_cheque/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/dev_print_cheque/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev_print_cheque/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/dev_print_cheque/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev_print_cheque/models/account_voucher.py" beforeDir="false" afterPath="$PROJECT_DIR$/dev_print_cheque/models/account_voucher.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev_print_cheque/models/cheque_setting.py" beforeDir="false" afterPath="$PROJECT_DIR$/dev_print_cheque/models/cheque_setting.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev_print_cheque/report/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/dev_print_cheque/report/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev_print_cheque/report/print_cheque.py" beforeDir="false" afterPath="$PROJECT_DIR$/dev_print_cheque/report/print_cheque.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev_print_cheque/wizard/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/dev_print_cheque/wizard/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev_print_cheque/wizard/dev_print_cheque_wizard.py" beforeDir="false" afterPath="$PROJECT_DIR$/dev_print_cheque/wizard/dev_print_cheque_wizard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fx_hide_action_archive_button/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/fx_hide_action_archive_button/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fx_hide_action_archive_button/models/inherit_res_users.py" beforeDir="false" afterPath="$PROJECT_DIR$/fx_hide_action_archive_button/models/inherit_res_users.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_batch_payment/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_batch_payment/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_batch_payment_bill_date_due/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_batch_payment_bill_date_due/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_batch_payment_bill_date_due/models/account_move.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_batch_payment_bill_date_due/models/account_move.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_batch_payment_reports/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_batch_payment_reports/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_batch_payment_reports/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_batch_payment_reports/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_batch_payment_reports/models/account_batch_payment.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_batch_payment_reports/models/account_batch_payment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_mail_template/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_mail_template/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_mail_template/models/account_move.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_mail_template/models/account_move.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_mail_template/models/res_partner.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_mail_template/models/res_partner.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_report_templates/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_report_templates/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_sale/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_sale/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_sale/models/sale_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_sale/models/sale_order.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_sale_crm_team/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_sale_crm_team/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_sale_crm_team/models/crm_team.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_sale_crm_team/models/crm_team.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_sale_document_checklist/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_sale_document_checklist/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_sale_document_checklist/models/sale_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_sale_document_checklist/models/sale_order.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_sale_document_checklist/models/sale_order_document_checklist.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_sale_document_checklist/models/sale_order_document_checklist.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_sale_document_checklist/wizard/sale_make_invoice_advance.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_sale_document_checklist/wizard/sale_make_invoice_advance.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_sale_order_line_image/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_sale_order_line_image/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_sale_order_line_image/models/sale_order_line.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_sale_order_line_image/models/sale_order_line.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_sale_order_number_editable/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_sale_order_number_editable/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_sale_report_file_rename/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_sale_report_file_rename/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_sale_report_file_rename/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_sale_report_file_rename/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intalio_sale_report_file_rename/models/sale_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/intalio_sale_report_file_rename/models/sale_order.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_arabic_font/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_arabic_font/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_arabic_font/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_arabic_font/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_base_style/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_base_style/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_base_style/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_base_style/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_delivery/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_delivery/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_delivery/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_delivery/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_header/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_header/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_header/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_header/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_header/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_header/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_header/models/base_document_layout.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_header/models/base_document_layout.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_header/models/res_company.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_header/models/res_company.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_invoice/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_invoice/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_invoice/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_invoice/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_invoice/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_invoice/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_invoice/models/account_move.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_invoice/models/account_move.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_payment/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_payment/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_payment/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_payment/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_payment/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_payment/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_payment/models/account_payment.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_payment/models/account_payment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_purchase/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_purchase/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_purchase/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_purchase/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_purchase/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_purchase/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_purchase/models/purchase_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_purchase/models/purchase_order.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_sales/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_sales/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_sales/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_sales/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nati_reports_sales/models/sale_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/nati_reports_sales/models/sale_order.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_approval_stamp/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/user_approval_stamp/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_approval_stamp/models/dynamic_approval_mixin.py" beforeDir="false" afterPath="$PROJECT_DIR$/user_approval_stamp/models/dynamic_approval_mixin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_approval_stamp/models/dynamic_approval_request.py" beforeDir="false" afterPath="$PROJECT_DIR$/user_approval_stamp/models/dynamic_approval_request.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_approval_stamp/models/res_company.py" beforeDir="false" afterPath="$PROJECT_DIR$/user_approval_stamp/models/res_company.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_approval_stamp/models/user_stamp.py" beforeDir="false" afterPath="$PROJECT_DIR$/user_approval_stamp/models/user_stamp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_approval_stamp/wizards/approve_dynamic_approval_wizard.py" beforeDir="false" afterPath="$PROJECT_DIR$/user_approval_stamp/wizards/approve_dynamic_approval_wizard.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +147,12 @@
     &quot;last_opened_file_path&quot;: &quot;/home/yasser/Desktop/python-blog/2022/10 - October/flake8/test&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/.github" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

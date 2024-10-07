@@ -13,97 +13,123 @@ _logger = logging.getLogger(__name__)
 
 
 class DynamicApprovalMixin(models.AbstractModel):
-    _name = 'dynamic.approval.mixin'
-    _description = 'Advanced Approval Mixin'
+    _name = "dynamic.approval.mixin"
+    _description = "Advanced Approval Mixin"
     _state_field = "state"  # to update field with status, you need to override in your module to add selection_add
-    _state_from = ["draft"]  # to check that this stage is source that need to convert from it
-    _state_to = ['approved']  # to convert to it when no pending approval
+    _state_from = [
+        "draft"
+    ]  # to check that this stage is source that need to convert from it
+    _state_to = ["approved"]  # to convert to it when no pending approval
     _cancel_state = "cancel"
     _tier_validation_buttons_xpath = "/form/header/button[last()]"
     _tier_validation_manual_config = False
     _company_field = False  # to search for matched advanced approval based on company
     _not_matched_action_xml_id = False  # if no matched condition applied appear wizard to add custom action or restrict
-    _reset_user = 'approve_requester_id'  # allow to appear request approve button to user
-    _custom_button_name = 'Request Validation'
+    _reset_user = (
+        "approve_requester_id"  # allow to appear request approve button to user
+    )
+    _custom_button_name = "Request Validation"
 
     dynamic_approve_request_ids = fields.One2many(
-        comodel_name='dynamic.approval.request',
-        inverse_name='res_id',
+        comodel_name="dynamic.approval.request",
+        inverse_name="res_id",
         auto_join=True,
         copy=False,
-        domain=lambda self: [('res_model', '=', self._name)]
+        domain=lambda self: [("res_model", "=", self._name)],
     )
     dynamic_approve_pending_group = fields.Boolean(
-        compute='_compute_dynamic_approve_pending_group',
+        compute="_compute_dynamic_approve_pending_group",
     )
     approve_requester_id = fields.Many2one(
-        comodel_name='res.users',
+        comodel_name="res.users",
         string="Approve Requester",
         copy=False,
     )
     dynamic_approval_id = fields.Many2one(
-        comodel_name='dynamic.approval',
+        comodel_name="dynamic.approval",
         string="Dynamic Approval",
         copy=False,
     )
-    apply_recall = fields.Boolean(related='dynamic_approval_id.apply_recall')
+    apply_recall = fields.Boolean(related="dynamic_approval_id.apply_recall")
 
     is_dynamic_approval_requester = fields.Boolean(
-        compute='compute_is_dynamic_approval_requester')
+        compute="compute_is_dynamic_approval_requester"
+    )
     state_from_name = fields.Char(
         copy=False,
         readonly=True,
     )
     validated = fields.Boolean(
-        compute="_compute_validated_rejected",
-        search="_search_validated"
+        compute="_compute_validated_rejected", search="_search_validated"
     )
-    need_validation = fields.Boolean(
-        compute="_compute_need_validation"
-    )
+    need_validation = fields.Boolean(compute="_compute_need_validation")
     rejected = fields.Boolean(
-        compute="_compute_validated_rejected",
-        search="_search_rejected"
+        compute="_compute_validated_rejected", search="_search_rejected"
     )
-    next_review = fields.Char(
-        compute="_compute_next_review"
-    )
+    next_review = fields.Char(compute="_compute_next_review")
     approval_type = fields.Selection(
         string="Work Flow Type",
         selection=[
-            ('auto', 'Auto Select'),
-            ('manual', 'Manual Select'),
+            ("auto", "Auto Select"),
+            ("manual", "Manual Select"),
         ],
-        default='auto', copy=False)
+        default="auto",
+        copy=False,
+    )
 
     alias_id = fields.Many2one(
-        'mail.alias',
-        string='Email Alias',
+        "mail.alias",
+        string="Email Alias",
         help=" Route Approval/Rejection Emails",
-        compute='_compute_approval_alias',
-        search='_search_approval_alias'
+        compute="_compute_approval_alias",
+        search="_search_approval_alias",
     )
-    alias_domain = fields.Char('Alias domain', compute='_compute_alias_domain')
-    alias_name = fields.Char('Alias Name', copy=False, related='alias_id.alias_name', readonly=False)
-    hr_officer = fields.Many2one(string="Hr Officer", comodel_name='res.users',
-                                 compute='get_hr_approval_officer', readonly=True)
+    alias_domain = fields.Char("Alias domain", compute="_compute_alias_domain")
+    alias_name = fields.Char(
+        "Alias Name", copy=False, related="alias_id.alias_name", readonly=False
+    )
+    hr_officer = fields.Many2one(
+        string="Hr Officer",
+        comodel_name="res.users",
+        compute="get_hr_approval_officer",
+        readonly=True,
+    )
 
     def get_hr_approval_officer(self):
         for rec in self:
             rec.hr_officer = False
             if rec.dynamic_approval_id:
-                hr_officer = rec.dynamic_approval_id.approval_level_ids.filtered(
-                                     lambda x: x.hr_officer == True).user_id.id or False
+                hr_officer = (
+                    rec.dynamic_approval_id.approval_level_ids.filtered(
+                        lambda x: x.hr_officer == True
+                    ).user_id.id
+                    or False
+                )
                 rec.hr_officer = hr_officer
 
     def _default_alias_domain(self):
-        return self.env["ir.config_parameter"].sudo().get_param("mail.approvals.amail.domain")
+        return (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param("mail.approvals.amail.domain")
+        )
 
     def _compute_approval_alias(self):
-        alias_id = self.env["mail.alias"].sudo().search([('alias_model_id.model', '=', self._name),
-                                                         ('apply_dynamic_approval', '=', True)], limit=1)
+        alias_id = (
+            self.env["mail.alias"]
+            .sudo()
+            .search(
+                [
+                    ("alias_model_id.model", "=", self._name),
+                    ("apply_dynamic_approval", "=", True),
+                ],
+                limit=1,
+            )
+        )
         if not alias_id.alias_name:
-            approvals_alias = self.env["ir.config_parameter"].sudo().get_param("mail.approvals.amail")
+            approvals_alias = (
+                self.env["ir.config_parameter"].sudo().get_param("mail.approvals.amail")
+            )
             alias_id.alias_name = approvals_alias
 
         for record in self:
@@ -120,7 +146,7 @@ class DynamicApprovalMixin(models.AbstractModel):
                 if value in record.approval_alias:
                     ids.append(record.id)
             # You can extend with more operators as per your requirements
-        return [('id', 'in', ids)]
+        return [("id", "in", ids)]
 
     def _compute_alias_domain(self):
         alias_domain = self._default_alias_domain()
@@ -128,34 +154,48 @@ class DynamicApprovalMixin(models.AbstractModel):
             record.alias_domain = alias_domain
 
     def _compute_alias_dest(self):
-        approvals_alias = self.env["ir.config_parameter"].sudo().get_param("mail.approvals.amail")
-        approvals_domain = self.env["ir.config_parameter"].sudo().get_param("mail.approvals.amail.domain")
+        approvals_alias = (
+            self.env["ir.config_parameter"].sudo().get_param("mail.approvals.amail")
+        )
+        approvals_domain = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param("mail.approvals.amail.domain")
+        )
 
         if not (approvals_alias and approvals_domain):
-            raise ValidationError(_("Can't route the approval email please configure the approval alias and domain"))
+            raise ValidationError(
+                _(
+                    "Can't route the approval email please configure the approval alias and domain"
+                )
+            )
 
-        return approvals_alias + '@' + approvals_domain
+        return approvals_alias + "@" + approvals_domain
 
     def _prepare_document_url(self):
-        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-        url = "{}/web#model={}&id={}&view_type=form".format(base_url, self._name, self.id)
+        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+        url = "{}/web#model={}&id={}&view_type=form".format(
+            base_url, self._name, self.id
+        )
         return url
 
     def get_approval_url(self, user=None, action=None):
         alias_email = self._compute_alias_dest()
         link = urllib.parse.quote(self._prepare_document_url())
-        url = "mailto:{}?subject=Re: {}&body= *********** please don't update the email content" \
-              " *********** \n This email is to {} the request with sequence {} \n ID:[{}] \n Object:[{}] \n ConfirmedBy:[{}] \n  [[NOTE]] \n " \
-              "[[ENDNOTE]] \n {} \n" \
-              "[[end]] \n".format(
-            alias_email,
-            self.name,
-            action,
-            self.name,
-            self.id,
-            self._name,
-            user,
-            link
+        url = (
+            "mailto:{}?subject=Re: {}&body= *********** please don't update the email content"
+            " *********** \n This email is to {} the request with sequence {} \n ID:[{}] \n Object:[{}] \n ConfirmedBy:[{}] \n  [[NOTE]] \n "
+            "[[ENDNOTE]] \n {} \n"
+            "[[end]] \n".format(
+                alias_email,
+                self.name,
+                action,
+                self.name,
+                self.id,
+                self._name,
+                user,
+                link,
+            )
         )
         return url
 
@@ -169,7 +209,9 @@ class DynamicApprovalMixin(models.AbstractModel):
 
     def _compute_validated_rejected(self):
         for rec in self:
-            rec.validated = self._calc_reviews_validated(rec.dynamic_approve_request_ids)
+            rec.validated = self._calc_reviews_validated(
+                rec.dynamic_approve_request_ids
+            )
             rec.rejected = self._calc_reviews_rejected(rec.dynamic_approve_request_ids)
 
     @api.model
@@ -201,15 +243,17 @@ class DynamicApprovalMixin(models.AbstractModel):
             if isinstance(rec.id, models.NewId):
                 rec.need_validation = False
                 continue
-            tiers = self.env["dynamic.approval"].search([
-                ("model", "=", self._name),
-                ('approval_level_ids', '!=', False),
-            ])
+            tiers = self.env["dynamic.approval"].search(
+                [
+                    ("model", "=", self._name),
+                    ("approval_level_ids", "!=", False),
+                ]
+            )
             valid_tiers = any([tier.is_matched_approval(rec) for tier in tiers])
             rec.need_validation = (
-                    not rec.dynamic_approve_request_ids
-                    and valid_tiers
-                    and getattr(rec, self._state_field) in self._state_from
+                not rec.dynamic_approve_request_ids
+                and valid_tiers
+                and getattr(rec, self._state_field) in self._state_from
             )
 
     @api.model
@@ -225,17 +269,22 @@ class DynamicApprovalMixin(models.AbstractModel):
             return [("id", "not in", pos.ids)]
 
     def compute_is_dynamic_approval_requester(self):
-        """ return true if current user is who submit approval """
+        """return true if current user is who submit approval"""
         current_user = self.env.user
         for record in self:
             is_dynamic_approval_requester = False
-            if record.approve_requester_id and current_user == record.approve_requester_id:
+            if (
+                record.approve_requester_id
+                and current_user == record.approve_requester_id
+            ):
                 is_dynamic_approval_requester = True
             elif not record.dynamic_approve_request_ids:
                 is_dynamic_approval_requester = True
             elif getattr(record, self._reset_user) == current_user:
                 is_dynamic_approval_requester = True
-            elif self.env.user.has_group('base_dynamic_approval.dynamic_approval_user_group'):
+            elif self.env.user.has_group(
+                "base_dynamic_approval.dynamic_approval_user_group"
+            ):
                 is_dynamic_approval_requester = True
             record.is_dynamic_approval_requester = is_dynamic_approval_requester
 
@@ -243,24 +292,34 @@ class DynamicApprovalMixin(models.AbstractModel):
         for record in self:
             dynamic_approve_pending_group = False
             pend_approve_requests = record.dynamic_approve_request_ids
-            skip_order_approval = any(pend_approve_requests.mapped("dynamic_approval_id").mapped("skip_order_approval"))
+            skip_order_approval = any(
+                pend_approve_requests.mapped("dynamic_approval_id").mapped(
+                    "skip_order_approval"
+                )
+            )
 
             # Filter pending approval requests
             if not skip_order_approval:
-                pend_approve_requests = pend_approve_requests.filtered(lambda approver: approver.status == 'pending')
+                pend_approve_requests = pend_approve_requests.filtered(
+                    lambda approver: approver.status == "pending"
+                )
 
             # Find pending approval requests for the current user
             current_user_request = pend_approve_requests.filtered(
-                lambda approver: approver.user_id.id == self.env.user.id)
+                lambda approver: approver.user_id.id == self.env.user.id
+            )
 
             # Check if the current user has already approved
             user_has_already_approved = record.dynamic_approve_request_ids.filtered(
-                lambda approver: approver.user_id.id == self.env.user.id and approver.status == 'approved'
+                lambda approver: approver.user_id.id == self.env.user.id
+                and approver.status == "approved"
             )
 
             # Button visibility logic
             if current_user_request and not user_has_already_approved:
-                if self.env.user.has_group('base_dynamic_approval.group_force_dynamic_approval'):
+                if self.env.user.has_group(
+                    "base_dynamic_approval.group_force_dynamic_approval"
+                ):
                     dynamic_approve_pending_group = True
                 else:
                     if self.env.user in current_user_request.get_approve_user():
@@ -270,71 +329,95 @@ class DynamicApprovalMixin(models.AbstractModel):
             record.dynamic_approve_pending_group = dynamic_approve_pending_group
 
     def _notify_next_approval_request(self, matched_approval, user):
-        """ notify next approval """
+        """notify next approval"""
         self.ensure_one()
         if matched_approval.need_create_activity_to_approve:
-            activity_type = self.env.ref('base_dynamic_approval.mail_activity_type_waiting_approval',
-                                         raise_if_not_found=False)
-            summary = _('Approval needed for %s', self.display_name)
+            activity_type = self.env.ref(
+                "base_dynamic_approval.mail_activity_type_waiting_approval",
+                raise_if_not_found=False,
+            )
+            summary = _("Approval needed for %s", self.display_name)
             self._create_activity(user, summary, activity_type)
         if matched_approval.email_template_to_approve_id and user != self.env.user:
             email_values = {
-                'email_to': user.email_formatted,
-                'email_from': self.env.user.email_formatted
+                "email_to": user.email_formatted,
+                "email_from": self.env.user.email_formatted,
             }
             self.dynamic_approval_id.email_template_to_approve_id.with_context(
-                name_to=user.name, user_lang=user.lang, user_id=user.id).send_mail(
-                self.id, email_values=email_values, force_send=True)
+                name_to=user.name, user_lang=user.lang, user_id=user.id
+            ).send_mail(self.id, email_values=email_values, force_send=True)
 
     def _create_activity(self, users, summary, activity_type=False):
-        """ create activity based on next user """
+        """create activity based on next user"""
         if not activity_type:
-            activity_type = self.env.ref('mail.mail_activity_data_todo', raise_if_not_found=False)
+            activity_type = self.env.ref(
+                "mail.mail_activity_data_todo", raise_if_not_found=False
+            )
         if activity_type:
             for record in self:
                 for user in users:
                     try:
-                        record.with_context(mail_activity_quick_update=True).activity_schedule(
+                        record.with_context(
+                            mail_activity_quick_update=True
+                        ).activity_schedule(
                             activity_type_id=activity_type.id,
                             summary=summary,
                             user_id=user.id,
                         )
                     except Exception as error_message:
                         _logger.exception(
-                            'Cannot create activity for user %s. error: %s' % (user.name or '', error_message))
+                            "Cannot create activity for user %s. error: %s"
+                            % (user.name or "", error_message)
+                        )
 
     def _run_final_approve_function(self):
-        """ this method should be override to add custom function based on model"""
+        """this method should be override to add custom function based on model"""
         return True
 
     def _action_final_approve(self):
-        """ mark order as approved """
+        """mark order as approved"""
         self.ensure_one()
         self._run_final_approve_function()
         # self.write({
         #     self._state_field: self._state_to,
         # })
         # create activity based on setting
-        if self.dynamic_approval_id and self.dynamic_approval_id.default_notify_user_field_after_final_approve_id:
-            summary = _('Approval done for %s', self.display_name)
-            user = getattr(self, self.dynamic_approval_id.default_notify_user_field_after_final_approve_id.name)
+        if (
+            self.dynamic_approval_id
+            and self.dynamic_approval_id.default_notify_user_field_after_final_approve_id
+        ):
+            summary = _("Approval done for %s", self.display_name)
+            user = getattr(
+                self,
+                self.dynamic_approval_id.default_notify_user_field_after_final_approve_id.name,
+            )
             self._create_activity(user, summary)
         # send email to users
-        if self.dynamic_approval_id and self.dynamic_approval_id.notify_user_field_after_final_approve_ids and \
-                self.dynamic_approval_id.email_template_after_final_approve_id:
-            users_to_send = self.env['res.users']
+        if (
+            self.dynamic_approval_id
+            and self.dynamic_approval_id.notify_user_field_after_final_approve_ids
+            and self.dynamic_approval_id.email_template_after_final_approve_id
+        ):
+            users_to_send = self.env["res.users"]
             for user_field in self.dynamic_approval_id.notify_user_field_rejection_ids:
                 users_to_send |= getattr(self, user_field.name)
             # not send email for same user twice
-            users_to_send = self.env['res.users'].browse(users_to_send.mapped('id'))
+            users_to_send = self.env["res.users"].browse(users_to_send.mapped("id"))
             for user in users_to_send:
                 if user != self.env.user and user.email:
-                    email_values = {'email_to': user.email_formatted, 'email_from': self.env.user.email_formatted}
+                    email_values = {
+                        "email_to": user.email_formatted,
+                        "email_from": self.env.user.email_formatted,
+                    }
                     self.dynamic_approval_id.email_template_after_final_approve_id.with_context(
-                        name_to=user.name, user_lang=user.lang, user_id=user.id).send_mail(self.id,
-                                                                                           email_values=email_values,
-                                                                                           force_send=True)
-        if self.dynamic_approval_id and self.dynamic_approval_id.after_final_approve_server_action_id:
+                        name_to=user.name, user_lang=user.lang, user_id=user.id
+                    ).send_mail(
+                        self.id, email_values=email_values, force_send=True
+                    )
+        if (
+            self.dynamic_approval_id
+            and self.dynamic_approval_id.after_final_approve_server_action_id
+        ):
             action = self.dynamic_approval_id.after_final_approve_server_action_id.with_context(
                 active_model=self._name,
                 active_ids=[self.id],
@@ -345,49 +428,63 @@ class DynamicApprovalMixin(models.AbstractModel):
                 action.run()
             except UserError as e:
                 raise UserError(
-                    f'Approval Rejection: record <{self.id}> model <{self._name}> encountered server action issue {str(e)}')
+                    f"Approval Rejection: record <{self.id}> model <{self._name}> encountered server action issue {str(e)}"
+                )
             except ValidationError as e:
                 raise ValidationError(
-                    f'Approval Rejection: record <{self.id}> model <{self._name}> encountered server action issue {str(e)}')
+                    f"Approval Rejection: record <{self.id}> model <{self._name}> encountered server action issue {str(e)}"
+                )
             except Exception as e:
-                _logger.warning('Approval Rejection: record <%s> model <%s> encountered server action issue %s',
-                                self.id, self._name, str(e), exc_info=True)
+                _logger.warning(
+                    "Approval Rejection: record <%s> model <%s> encountered server action issue %s",
+                    self.id,
+                    self._name,
+                    str(e),
+                    exc_info=True,
+                )
 
     def _get_user_approval_activities(self, users=False):
-        """ return users activities that need to mark done or cancel """
+        """return users activities that need to mark done or cancel"""
         domain = [
-            ('res_model', '=', self._name),
-            ('res_id', 'in', self.ids),
-            '|',
-            ('activity_type_id', '=', self.env.ref('base_dynamic_approval.mail_activity_type_waiting_approval').id),
-            ('activity_type_id', '=', self.env.ref('mail.mail_activity_data_todo').id),
+            ("res_model", "=", self._name),
+            ("res_id", "in", self.ids),
+            "|",
+            (
+                "activity_type_id",
+                "=",
+                self.env.ref(
+                    "base_dynamic_approval.mail_activity_type_waiting_approval"
+                ).id,
+            ),
+            ("activity_type_id", "=", self.env.ref("mail.mail_activity_data_todo").id),
         ]
         if users:
-            domain += [('user_id', 'in', users.ids)]
-        return self.env['mail.activity'].sudo().search(domain)
+            domain += [("user_id", "in", users.ids)]
+        return self.env["mail.activity"].sudo().search(domain)
 
     def unlink(self):
-        """ remove approval requests when delete so """
+        """remove approval requests when delete so"""
         self.remove_approval_requests()
         return super(DynamicApprovalMixin, self).unlink()
 
     def remove_approval_requests(self):
-        """ remove approval requests """
-        self.mapped('dynamic_approve_request_ids').sudo().unlink()
+        """remove approval requests"""
+        self.mapped("dynamic_approve_request_ids").sudo().unlink()
 
     def _get_pending_approvals(self, user):
-        """ return list of approval requests that need to approve """
+        """return list of approval requests that need to approve"""
         self.ensure_one()
         pending_approval_ids = []
         for request in self.dynamic_approve_request_ids.filtered(
-                lambda request_approve: request_approve.status in ['pending', 'new']):
+            lambda request_approve: request_approve.status in ["pending", "new"]
+        ):
             if user in request.get_approve_user():
                 pending_approval_ids.append(request.id)
             else:
                 break
         return pending_approval_ids
 
-    def _action_reset_original_state(self, reason='', reset_type='reject'):
+    def _action_reset_original_state(self, reason="", reset_type="reject"):
         """
         set record to original state and notify user or approvers
         :param reason: reason for reset
@@ -395,24 +492,28 @@ class DynamicApprovalMixin(models.AbstractModel):
         :param notify_approver: notify users who approved before
         """
         for record in self:
-            pending_approve_requests = \
-                record.dynamic_approve_request_ids.filtered(lambda approver: approver.status == 'pending')
-            approved_requests = \
-                record.dynamic_approve_request_ids.filtered(lambda approver: approver.status == 'approved')
+            pending_approve_requests = record.dynamic_approve_request_ids.filtered(
+                lambda approver: approver.status == "pending"
+            )
+            approved_requests = record.dynamic_approve_request_ids.filtered(
+                lambda approver: approver.status == "approved"
+            )
             activity = record._get_user_approval_activities()
-            if reset_type == 'reject':
+            if reset_type == "reject":
                 if activity:
-                    activity.action_feedback(feedback=_('Rejected, Reason ') + reason)
+                    activity.action_feedback(feedback=_("Rejected, Reason ") + reason)
                 else:
-                    record.message_post(body=_('Rejected, Reason ') + reason)
+                    record.message_post(body=_("Rejected, Reason ") + reason)
                 #  update approval request status
-                pending_approve_requests.write({
-                    'status': 'rejected',
-                    'approve_date': False,
-                    'approved_by': False,
-                    'reject_reason': reason,
-                    'reject_date': datetime.now(),
-                })
+                pending_approve_requests.write(
+                    {
+                        "status": "rejected",
+                        "approve_date": False,
+                        "approved_by": False,
+                        "reject_reason": reason,
+                        "reject_date": datetime.now(),
+                    }
+                )
 
                 # if pending_approve_requests.status == 'rejected':
                 #     val = {'user_id': self.env.uid,
@@ -423,41 +524,72 @@ class DynamicApprovalMixin(models.AbstractModel):
                 #            }
                 #     self.approval_history_ids.create(val)
                 # create activity for user based on approval configuration
-                if record.dynamic_approval_id and record.dynamic_approval_id.default_notify_user_field_rejection_id:
-                    activity_user = \
-                        getattr(record, record.dynamic_approval_id.default_notify_user_field_rejection_id.name)
+                if (
+                    record.dynamic_approval_id
+                    and record.dynamic_approval_id.default_notify_user_field_rejection_id
+                ):
+                    activity_user = getattr(
+                        record,
+                        record.dynamic_approval_id.default_notify_user_field_rejection_id.name,
+                    )
                     if activity_user != self.env.user:
-                        summary = _('%s approval request rejected', record.display_name)
+                        summary = _("%s approval request rejected", record.display_name)
                         record._create_activity(activity_user, summary)
                 # send email template to users that need to know if record is rejected
-                if record.dynamic_approval_id and record.dynamic_approval_id.notify_user_field_rejection_ids and \
-                        record.dynamic_approval_id.rejection_email_template_id:
-                    users_to_send = self.env['res.users']
-                    for user_field in record.dynamic_approval_id.notify_user_field_rejection_ids:
+                if (
+                    record.dynamic_approval_id
+                    and record.dynamic_approval_id.notify_user_field_rejection_ids
+                    and record.dynamic_approval_id.rejection_email_template_id
+                ):
+                    users_to_send = self.env["res.users"]
+                    for (
+                        user_field
+                    ) in record.dynamic_approval_id.notify_user_field_rejection_ids:
                         users_to_send |= getattr(record, user_field.name)
                     # not send email for same user twice
-                    users_to_send = self.env['res.users'].browse(users_to_send.mapped('id'))
+                    users_to_send = self.env["res.users"].browse(
+                        users_to_send.mapped("id")
+                    )
                     for user in users_to_send:
                         if user != self.env.user and user.email:
-                            email_values = {'email_to': user.email_formatted,
-                                            'email_from': self.env.user.email_formatted}
+                            email_values = {
+                                "email_to": user.email_formatted,
+                                "email_from": self.env.user.email_formatted,
+                            }
                             record.dynamic_approval_id.rejection_email_template_id.with_context(
-                                name_to=user.name, user_lang=user.lang, reject_reason=reason,
-                                user_id=user.id).send_mail(
-                                record.id, email_values=email_values, force_send=True)
+                                name_to=user.name,
+                                user_lang=user.lang,
+                                reject_reason=reason,
+                                user_id=user.id,
+                            ).send_mail(
+                                record.id, email_values=email_values, force_send=True
+                            )
                 # send email template to users who approved to record before about rejection
-                if record.dynamic_approval_id and record.dynamic_approval_id.need_notify_rejection_approved_user and \
-                        record.dynamic_approval_id.rejection_email_template_id:
-                    approved_users = approved_requests.mapped('approved_by')
+                if (
+                    record.dynamic_approval_id
+                    and record.dynamic_approval_id.need_notify_rejection_approved_user
+                    and record.dynamic_approval_id.rejection_email_template_id
+                ):
+                    approved_users = approved_requests.mapped("approved_by")
                     for approved_user in approved_users:
                         if approved_user != self.env.user and approved_user.email:
-                            email_values = {'email_to': approved_user.email_formatted,
-                                            'email_from': self.env.user.email_formatted}
+                            email_values = {
+                                "email_to": approved_user.email_formatted,
+                                "email_from": self.env.user.email_formatted,
+                            }
                             record.dynamic_approval_id.rejection_email_template_id.with_context(
-                                name_to=approved_user.name, user_lang=user.lang, reject_reason=reason, user_id=user.id). \
-                                send_mail(record.id, email_values=email_values, force_send=True)
+                                name_to=approved_user.name,
+                                user_lang=user.lang,
+                                reject_reason=reason,
+                                user_id=user.id,
+                            ).send_mail(
+                                record.id, email_values=email_values, force_send=True
+                            )
                 # run server action
-                if record.dynamic_approval_id and record.dynamic_approval_id.rejection_server_action_id:
+                if (
+                    record.dynamic_approval_id
+                    and record.dynamic_approval_id.rejection_server_action_id
+                ):
                     action = self.dynamic_approval_id.rejection_server_action_id.with_context(
                         active_model=self._name,
                         active_ids=[record.id],
@@ -468,22 +600,33 @@ class DynamicApprovalMixin(models.AbstractModel):
                         action.run()
                     except ValidationError as e:
                         raise ValidationError(
-                            f'Approval Rejection: record <{self.id}> model <{self._name}> encountered server action issue {str(e)}')
+                            f"Approval Rejection: record <{self.id}> model <{self._name}> encountered server action issue {str(e)}"
+                        )
                     except Exception as e:
-                        _logger.warning('Approval Rejection: record <%s> model <%s> encountered server action issue %s',
-                                        self.id, self._name, str(e), exc_info=True)
+                        _logger.warning(
+                            "Approval Rejection: record <%s> model <%s> encountered server action issue %s",
+                            self.id,
+                            self._name,
+                            str(e),
+                            exc_info=True,
+                        )
 
                     except Exception as e:
-                        _logger.warning('Approval Rejection: record <%s> model <%s> encountered server action issue %s',
-                                        record.id, record._name, str(e), exc_info=True)
+                        _logger.warning(
+                            "Approval Rejection: record <%s> model <%s> encountered server action issue %s",
+                            record.id,
+                            record._name,
+                            str(e),
+                            exc_info=True,
+                        )
 
-            if reset_type == 'recall':
+            if reset_type == "recall":
                 if activity:
                     activity.unlink()
                 record.remove_approval_requests()
                 # pending_approve_requests.write({'status': 'recall'})
                 # approved_requests.write({'status': 'recall'})
-                record.message_post(body=_('Recalled, Reason ') + reason)
+                record.message_post(body=_("Recalled, Reason ") + reason)
 
                 # if pending_approve_requests.status == 'recall':
                 #     val = {'user_id': self.env.uid,
@@ -495,60 +638,104 @@ class DynamicApprovalMixin(models.AbstractModel):
                 #     self.approval_history_ids.create(val)
 
                 # create activity for user based on approval configuration
-                if record.dynamic_approval_id and record.dynamic_approval_id.default_notify_user_field_recall_id:
-                    activity_user = getattr(record, record.dynamic_approval_id.default_notify_user_field_recall_id.name)
+                if (
+                    record.dynamic_approval_id
+                    and record.dynamic_approval_id.default_notify_user_field_recall_id
+                ):
+                    activity_user = getattr(
+                        record,
+                        record.dynamic_approval_id.default_notify_user_field_recall_id.name,
+                    )
                     if activity_user != self.env.user:
-                        summary = _('%s approval request recalled', record.display_name)
+                        summary = _("%s approval request recalled", record.display_name)
                         record._create_activity(activity_user, summary)
                 # send email template to users that need to know if record is recalled
-                if record.dynamic_approval_id and record.dynamic_approval_id.notify_user_field_recall_ids and \
-                        record.dynamic_approval_id.recall_email_template_id:
-                    users_to_send = self.env['res.users']
-                    for user_field in record.dynamic_approval_id.notify_user_field_recall_ids:
+                if (
+                    record.dynamic_approval_id
+                    and record.dynamic_approval_id.notify_user_field_recall_ids
+                    and record.dynamic_approval_id.recall_email_template_id
+                ):
+                    users_to_send = self.env["res.users"]
+                    for (
+                        user_field
+                    ) in record.dynamic_approval_id.notify_user_field_recall_ids:
                         users_to_send |= getattr(record, user_field.name)
                     # not send email for same user twice
-                    users_to_send = self.env['res.users'].browse(users_to_send.mapped('id'))
+                    users_to_send = self.env["res.users"].browse(
+                        users_to_send.mapped("id")
+                    )
                     for user in users_to_send:
                         if user != self.env.user and user.email:
-                            email_values = {'email_to': user.email_formatted,
-                                            'email_from': self.env.user.email_formatted}
+                            email_values = {
+                                "email_to": user.email_formatted,
+                                "email_from": self.env.user.email_formatted,
+                            }
                             record.dynamic_approval_id.recall_email_template_id.with_context(
-                                name_to=user.name, user_lang=user.lang, recall_reason=reason,
-                                user_id=user.id).send_mail(
-                                record.id, email_values=email_values, force_send=True)
+                                name_to=user.name,
+                                user_lang=user.lang,
+                                recall_reason=reason,
+                                user_id=user.id,
+                            ).send_mail(
+                                record.id, email_values=email_values, force_send=True
+                            )
                 # send email template to users who approved to record before about recall
-                if record.dynamic_approval_id and record.dynamic_approval_id.need_notify_recall_approved_user and \
-                        record.dynamic_approval_id.recall_email_template_id:
-                    approved_users = approved_requests.mapped('approved_by')
+                if (
+                    record.dynamic_approval_id
+                    and record.dynamic_approval_id.need_notify_recall_approved_user
+                    and record.dynamic_approval_id.recall_email_template_id
+                ):
+                    approved_users = approved_requests.mapped("approved_by")
                     for approved_user in approved_users:
                         if approved_user != self.env.user and approved_user.email:
-                            email_values = {'email_to': approved_user.email_formatted,
-                                            'email_from': self.env.user.email_formatted}
+                            email_values = {
+                                "email_to": approved_user.email_formatted,
+                                "email_from": self.env.user.email_formatted,
+                            }
                             record.dynamic_approval_id.recall_email_template_id.with_context(
-                                name_to=approved_user.name, user_lang=user.lang, recall_reason=reason, user_id=user.id). \
-                                send_mail(record.id, email_values=email_values, force_send=True)
+                                name_to=approved_user.name,
+                                user_lang=user.lang,
+                                recall_reason=reason,
+                                user_id=user.id,
+                            ).send_mail(
+                                record.id, email_values=email_values, force_send=True
+                            )
 
                 # run server action
-                if record.dynamic_approval_id and record.dynamic_approval_id.recall_server_action_id:
-                    action = self.dynamic_approval_id.recall_server_action_id.with_context(
-                        active_model=self._name,
-                        active_ids=[record.id],
-                        active_id=record.id,
-                        force_dynamic_validation=True,
+                if (
+                    record.dynamic_approval_id
+                    and record.dynamic_approval_id.recall_server_action_id
+                ):
+                    action = (
+                        self.dynamic_approval_id.recall_server_action_id.with_context(
+                            active_model=self._name,
+                            active_ids=[record.id],
+                            active_id=record.id,
+                            force_dynamic_validation=True,
+                        )
                     )
                     try:
                         action.run()
                     except ValidationError as e:
                         raise ValidationError(
-                            f'Approval Rejection: record <{self.id}> model <{self._name}> encountered server action issue {str(e)}')
+                            f"Approval Rejection: record <{self.id}> model <{self._name}> encountered server action issue {str(e)}"
+                        )
                     except Exception as e:
-                        _logger.warning('Approval Rejection: record <%s> model <%s> encountered server action issue %s',
-                                        self.id, self._name, str(e), exc_info=True)
+                        _logger.warning(
+                            "Approval Rejection: record <%s> model <%s> encountered server action issue %s",
+                            self.id,
+                            self._name,
+                            str(e),
+                            exc_info=True,
+                        )
 
                     except Exception as e:
                         _logger.warning(
-                            'Approval Recall: record <%s> model <%s> encountered server action issue %s',
-                            record.id, record._name, str(e), exc_info=True)
+                            "Approval Recall: record <%s> model <%s> encountered server action issue %s",
+                            record.id,
+                            record._name,
+                            str(e),
+                            exc_info=True,
+                        )
 
             # record.write({
             #     record._state_field: record.state_from_name or record._state_from[0]
@@ -557,21 +744,35 @@ class DynamicApprovalMixin(models.AbstractModel):
     def is_transfer_from_to_status(self, vals):
         self.ensure_one()
         return (
-                getattr(self, self._state_field) in self._state_from
-                and vals.get(self._state_field) in self._state_to
+            getattr(self, self._state_field) in self._state_from
+            and vals.get(self._state_field) in self._state_to
         )
 
     @api.model
     def _get_under_validation_exceptions(self):
         """Extend for more field exceptions."""
-        return ["message_follower_ids", "access_token", 'release_to_pay_manual', "message_main_attachment_id"]
+        return [
+            "message_follower_ids",
+            "access_token",
+            "release_to_pay_manual",
+            "message_main_attachment_id",
+        ]
 
     @api.model
     def _get_after_validation_exceptions(self):
         """Extend for more field exceptions."""
-        return ["message_follower_ids", "access_token", "managerapp_date", "approve_manager_id", "userrapp_date",
-                "approve_employee_id", "employee_confirm_id", 'confirm_date', 'release_to_pay_manual',
-                "message_main_attachment_id"]
+        return [
+            "message_follower_ids",
+            "access_token",
+            "managerapp_date",
+            "approve_manager_id",
+            "userrapp_date",
+            "approve_employee_id",
+            "employee_confirm_id",
+            "confirm_date",
+            "release_to_pay_manual",
+            "message_main_attachment_id",
+        ]
 
     def _check_allow_write_under_validation(self, vals):
         """Allow to add exceptions for fields that are allowed to be written
@@ -590,7 +791,7 @@ class DynamicApprovalMixin(models.AbstractModel):
         exceptions = self._get_after_validation_exceptions()
         for val in vals:
             if val not in exceptions:
-                print('_check_allow_write_after_validation')
+                print("_check_allow_write_after_validation")
                 print(val)
                 _logger.warning(val)
                 return False
@@ -600,9 +801,9 @@ class DynamicApprovalMixin(models.AbstractModel):
 
     def action_dynamic_approval_request(self):
         """
-         search for advanced approvals that match current record and add approvals
-         if record does not match then appear wizard to confirm order without approval
-         """
+        search for advanced approvals that match current record and add approvals
+        if record does not match then appear wizard to confirm order without approval
+        """
         # for record in self:
         #     if record.approval_type == 'auto':
         #         matched_approval = self.env['dynamic.approval'].action_set_approver(
@@ -612,23 +813,39 @@ class DynamicApprovalMixin(models.AbstractModel):
         #         record.apply_dynamic_approval(matched_approval)
 
         print(self._name)
-        approval_id = self.env['dynamic.approval'].sudo().search(
-            [('model_id.model', '=', 'material.purchase.requisition'), ('active', '=', True)])
+        approval_id = (
+            self.env["dynamic.approval"]
+            .sudo()
+            .search(
+                [
+                    ("model_id.model", "=", "material.purchase.requisition"),
+                    ("active", "=", True),
+                ]
+            )
+        )
         print(approval_id)
         active_rec = self
         # approval_id = self.env['dynamic.approval'].search([('dynamic_approve', '=', True)])
-        if approval_id and self.env.user.has_group('base_dynamic_approval.dynamic_approval_admin_group'):
+        if approval_id and self.env.user.has_group(
+            "base_dynamic_approval.dynamic_approval_admin_group"
+        ):
             return {
-                'type': 'ir.actions.act_window',
-                'name': 'Define Approval Levels',
-                'res_model': 'levels.dynamic.approval.wizard',
-                'view_mode': 'form',
-                'view_id': self.env.ref('base_dynamic_approval.levels_dynamic_approval_wizard_form').id,
-                'target': 'new',
+                "type": "ir.actions.act_window",
+                "name": "Define Approval Levels",
+                "res_model": "levels.dynamic.approval.wizard",
+                "view_mode": "form",
+                "view_id": self.env.ref(
+                    "base_dynamic_approval.levels_dynamic_approval_wizard_form"
+                ).id,
+                "target": "new",
             }
         else:
             for record in self:
-                company = getattr(record, self._company_field) if self._company_field else False
+                company = (
+                    getattr(record, self._company_field)
+                    if self._company_field
+                    else False
+                )
                 if getattr(record, record._state_field) in self._state_from:
                     if record.dynamic_approve_request_ids:
                         record.remove_approval_requests()
@@ -636,52 +853,63 @@ class DynamicApprovalMixin(models.AbstractModel):
                         activity = record._get_user_approval_activities()
                         if activity:
                             activity.action_feedback()
-                    if record.approval_type == 'auto':
+                    if record.approval_type == "auto":
                         manager = None
-                        if approval_id.line_manager_approval and not self.env.user.has_group(
-                                'hr_exit_process.group_department_manager_for_exit'):
-                            manager = self.env['hr.employee'].search(
-                                [('user_id', '=', active_rec.create_uid.id)]).parent_id.user_id
-                        matched_approval = self.env['dynamic.approval'].action_set_approver(
+                        if (
+                            approval_id.line_manager_approval
+                            and not self.env.user.has_group(
+                                "hr_exit_process.group_department_manager_for_exit"
+                            )
+                        ):
+                            manager = (
+                                self.env["hr.employee"]
+                                .search([("user_id", "=", active_rec.create_uid.id)])
+                                .parent_id.user_id
+                            )
+                        matched_approval = self.env[
+                            "dynamic.approval"
+                        ].action_set_approver(
                             model=self._name,
                             res=record,
                             company=company,
-                            manager=manager
+                            manager=manager,
                         )
                         record.apply_dynamic_approval(matched_approval)
                     else:
-                        view_id = self.env.ref("base_dynamic_approval.work_flow_select_form")
+                        view_id = self.env.ref(
+                            "base_dynamic_approval.work_flow_select_form"
+                        )
                         return {
-                            'name': _('Work Flow Selection'),
-                            'type': 'ir.actions.act_window',
-                            'res_model': 'work.flow.select',
-                            'view_mode': 'form',
-                            'view_id': view_id.id,
-                            'target': 'new',
-                            'context': {
-                                'default_res_model': record._name,
-                                'default_res_id': record.id,
-                            }
+                            "name": _("Work Flow Selection"),
+                            "type": "ir.actions.act_window",
+                            "res_model": "work.flow.select",
+                            "view_mode": "form",
+                            "view_id": view_id.id,
+                            "target": "new",
+                            "context": {
+                                "default_res_model": record._name,
+                                "default_res_id": record.id,
+                            },
                         }
                 else:
-                    raise UserError(_('This status is not allowed to request approval'))
-        if self._name == 'account.batch.payment' and self.state == 'under_approval':
+                    raise UserError(_("This status is not allowed to request approval"))
+        if self._name == "account.batch.payment" and self.state == "under_approval":
             self.under_approval_check = True
 
     def apply_dynamic_approval(self, matched_approval):
         if matched_approval:
             vals = {
-                'approve_requester_id': self.env.user.id,
-                'dynamic_approval_id': matched_approval.id,
-                'state_from_name': getattr(self, self._state_field),
+                "approve_requester_id": self.env.user.id,
+                "dynamic_approval_id": matched_approval.id,
+                "state_from_name": getattr(self, self._state_field),
             }
             if matched_approval.state_under_approval:
-                vals.update({
-                    'state': matched_approval.state_under_approval
-                })
+                vals.update({"state": matched_approval.state_under_approval})
             self.with_context(force_dynamic_validation=True).write(vals)
-            next_waiting_approval = self.dynamic_approve_request_ids.sorted(lambda x: (x.sequence, x.id))[0]
-            next_waiting_approval.status = 'pending'
+            next_waiting_approval = self.dynamic_approve_request_ids.sorted(
+                lambda x: (x.sequence, x.id)
+            )[0]
+            next_waiting_approval.status = "pending"
             if next_waiting_approval.get_approve_user():
                 user = next_waiting_approval.get_approve_user()[0]
                 self._notify_next_approval_request(matched_approval, user)
@@ -700,7 +928,7 @@ class DynamicApprovalMixin(models.AbstractModel):
                 action = self.env["ir.actions.act_window"]._for_xml_id(action_id)
                 return action
 
-    def action_under_approval(self, note='', signature=False, stamp=False):
+    def action_under_approval(self, note="", signature=False, stamp=False):
         """
         Change status of approval request to approved and trigger next approval level or change status to be approved.
         :param note: Approval notes that the user will add and store in approval requests and add as activity feedback.
@@ -711,81 +939,106 @@ class DynamicApprovalMixin(models.AbstractModel):
 
             # Determine if we should skip the order approval process
             skip_order_approval = any(
-                all_approve_requests.mapped("dynamic_approval_id").mapped("skip_order_approval"))
+                all_approve_requests.mapped("dynamic_approval_id").mapped(
+                    "skip_order_approval"
+                )
+            )
 
             # Filter to get the pending approval requests for the current user
             current_user_request = all_approve_requests.filtered(
-                lambda r: r.user_id.id == self.env.user.id and r.status in ('pending','new')
+                lambda r: r.user_id.id == self.env.user.id
+                and r.status in ("pending", "new")
             )
 
             # If the current user's request exists and is pending
             if current_user_request:
                 # Approve the current user's request
-                current_user_request.write({
-                    'approve_date': datetime.now(),
-                    'approved_by': self.env.user.id,
-                    'status': 'approved',
-                    'approve_note': note,
-                    'approve_signature': signature
-                })
+                current_user_request.write(
+                    {
+                        "approve_date": datetime.now(),
+                        "approved_by": self.env.user.id,
+                        "status": "approved",
+                        "approve_note": note,
+                        "approve_signature": signature,
+                    }
+                )
 
                 # If skip_order_approval is True, approve all prior requests (those with lower sequence)
                 if skip_order_approval:
                     # Sort all approval requests by sequence
                     sorted_requests = all_approve_requests.sorted(lambda x: x.sequence)
-                    current_request = sorted_requests.filtered(lambda x: x.user_id.id == self.env.user.id)
+                    current_request = sorted_requests.filtered(
+                        lambda x: x.user_id.id == self.env.user.id
+                    )
 
                     if current_request:
                         # Approve all requests with a lower sequence than the current user's request
                         prior_requests = sorted_requests.filtered(
-                            lambda r: r.sequence < current_request[0].sequence and r.status != 'approved')
+                            lambda r: r.sequence < current_request[0].sequence
+                            and r.status != "approved"
+                        )
                         for prior_request in prior_requests:
-                            prior_request.write({
-                                'approve_date': datetime.now(),
-                                'approved_by': self.env.user.id,
-                                'status': 'approved'
-                            })
+                            prior_request.write(
+                                {
+                                    "approve_date": datetime.now(),
+                                    "approved_by": self.env.user.id,
+                                    "status": "approved",
+                                }
+                            )
 
             # Handle activity feedback
             activity = record._get_user_approval_activities()
             if activity:
                 activity.action_feedback(feedback=note)
             else:
-                msg = _('Approved')
+                msg = _("Approved")
                 if note:
-                    msg += ' ' + note
+                    msg += " " + note
                 record.message_post(body=msg)
 
             # Run server action if defined
             if record.dynamic_approval_id.to_approve_server_action_id:
-                action = record.dynamic_approval_id.to_approve_server_action_id.with_context(
-                    active_model=self._name,
-                    active_ids=[record.id],
-                    active_id=record.id,
-                    force_dynamic_validation=True,
+                action = (
+                    record.dynamic_approval_id.to_approve_server_action_id.with_context(
+                        active_model=self._name,
+                        active_ids=[record.id],
+                        active_id=record.id,
+                        force_dynamic_validation=True,
+                    )
                 )
                 try:
                     action.run()
                 except ValidationError as e:
                     raise ValidationError(
-                        f'Approval Rejection: record <{self.id}> model <{self._name}> encountered server action issue {str(e)}')
+                        f"Approval Rejection: record <{self.id}> model <{self._name}> encountered server action issue {str(e)}"
+                    )
                 except UserError as e:
                     raise UserError(
-                        f'Approval Rejection: record <{self.id}> model <{self._name}> encountered server action issue {str(e)}')
+                        f"Approval Rejection: record <{self.id}> model <{self._name}> encountered server action issue {str(e)}"
+                    )
                 except Exception as e:
                     _logger.warning(
-                        'Approval Recall: record <%s> model <%s> encountered server action issue %s',
-                        record.id, record._name, str(e), exc_info=True)
+                        "Approval Recall: record <%s> model <%s> encountered server action issue %s",
+                        record.id,
+                        record._name,
+                        str(e),
+                        exc_info=True,
+                    )
 
             # Process next approval requests
             new_approve_requests = record.dynamic_approve_request_ids.filtered(
-                lambda approver: approver.status == 'new')
+                lambda approver: approver.status == "new"
+            )
             if new_approve_requests:
-                next_waiting_approval = new_approve_requests.sorted(lambda x: (x.sequence, x.id))[0]
-                next_waiting_approval.status = 'pending'
+                next_waiting_approval = new_approve_requests.sorted(
+                    lambda x: (x.sequence, x.id)
+                )[0]
+                next_waiting_approval.status = "pending"
                 if next_waiting_approval.get_approve_user():
                     user = next_waiting_approval.get_approve_user()[0]
-                    record._notify_next_approval_request(record.dynamic_approval_id, user)
+                    record._notify_next_approval_request(
+                        record.dynamic_approval_id, user
+                    )
             else:
                 record._action_final_approve()
 
@@ -794,7 +1047,9 @@ class DynamicApprovalMixin(models.AbstractModel):
     def _check_previously_action(self):
         user = self.env.user
         approval_requests = self.dynamic_approve_request_ids.filtered(
-            lambda req: (user == req.user_id or user in req.group_id.users) and req.status == 'pending')
+            lambda req: (user == req.user_id or user in req.group_id.users)
+            and req.status == "pending"
+        )
         if approval_requests:
             return False
         return True
@@ -834,7 +1089,9 @@ class DynamicApprovalMixin(models.AbstractModel):
                         "base_dynamic_approval.approval_page", params
                     )
                     new_node = etree.fromstring(str_element)
-                    new_arch, new_models = View.postprocess_and_fields(new_node, self._name)
+                    new_arch, new_models = View.postprocess_and_fields(
+                        new_node, self._name
+                    )
                     # approval_type_template = self.env["ir.qweb"]._render("base_dynamic_approval.approval_type_template")
                     # node.append(etree.fromstring(approval_type_template))
                     for model in new_models:
@@ -852,7 +1109,9 @@ class DynamicApprovalMixin(models.AbstractModel):
                         "base_dynamic_approval.approval_notebook", params
                     )
                     new_node = etree.fromstring(str_element)
-                    new_arch, new_models = View.postprocess_and_fields(new_node, self._name)
+                    new_arch, new_models = View.postprocess_and_fields(
+                        new_node, self._name
+                    )
                     # approval_type_template = self.env["ir.qweb"]._render("base_dynamic_approval.approval_type_template")
                     # node.append(etree.fromstring(approval_type_template))
                     for model in new_models:
@@ -979,7 +1238,9 @@ class DynamicApprovalMixin(models.AbstractModel):
     #         res["models"] = new_fields
     #     return res
     def write(self, vals):
-        force_dynamic_validation = self.env.context.get('force_dynamic_validation', False)
+        force_dynamic_validation = self.env.context.get(
+            "force_dynamic_validation", False
+        )
         if not force_dynamic_validation:
             for rec in self:
                 rec._check_changes_validity(vals)
@@ -994,7 +1255,7 @@ class DynamicApprovalMixin(models.AbstractModel):
             if self.need_validation:
                 if vals.get(self._state_field):
                     if self.is_transfer_from_to_status(vals):
-                        raise ValidationError('This Document Need Approval !')
+                        raise ValidationError("This Document Need Approval !")
         # TODO: Under Approval Checks
         elif self.dynamic_approve_request_ids and not self.validated:
             if not self._check_allow_write_under_validation(vals):
@@ -1007,26 +1268,33 @@ class DynamicApprovalMixin(models.AbstractModel):
                 # if not self._check_allow_write_after_validation(new_vals):
                 #     raise ValidationError(_("The operation is not allowed because this document is fully approved !"))
             else:
-                if not self._check_allow_write_after_validation(vals) and "applicant_name_id" not in vals:
-                    raise ValidationError(_("The operation is not allowed because this document is fully approved !"))
+                if (
+                    not self._check_allow_write_after_validation(vals)
+                    and "applicant_name_id" not in vals
+                ):
+                    raise ValidationError(
+                        _(
+                            "The operation is not allowed because this document is fully approved !"
+                        )
+                    )
 
     def check_context_vals(self, vals):
-        to_remove_value = self.env.context.get('to_remove_value')
+        to_remove_value = self.env.context.get("to_remove_value")
         if to_remove_value:
             if vals.get(to_remove_value):
                 del vals[to_remove_value]
 
-    show_original_buttons = fields.Boolean(compute='_show_original_buttons')
+    show_original_buttons = fields.Boolean(compute="_show_original_buttons")
 
     @api.model
     def get_dynamic_approval(self):
-        d = self.env['dynamic.approval'].search([('model_id', '=', self._name)])
+        d = self.env["dynamic.approval"].search([("model_id", "=", self._name)])
         return d[0] if d else []
 
     def _show_original_buttons(self):
         da = self.get_dynamic_approval()
         if da:
-            d = da.approval_condition_ids.mapped('filter_domain')
+            d = da.approval_condition_ids.mapped("filter_domain")
             recs = self.search(ast.literal_eval(d[0])) if d else []
         for rec in self:
             if not da:

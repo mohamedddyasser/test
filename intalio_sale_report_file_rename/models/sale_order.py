@@ -7,5 +7,9 @@ class SaleOrder(models.Model):
     def _get_report_filename(self):
         self.ensure_one()
         if self.analytic_account_id:
-            return f'{self.analytic_account_id.code} - {self.analytic_account_id.name}' if self.analytic_account_id.code else f'{self.analytic_account_id.name}'
+            return (
+                f"{self.analytic_account_id.code} - {self.analytic_account_id.name}"
+                if self.analytic_account_id.code
+                else f"{self.analytic_account_id.name}"
+            )
         return False

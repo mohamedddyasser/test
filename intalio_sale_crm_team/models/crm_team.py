@@ -2,15 +2,19 @@ from odoo import api, fields, models, _
 
 
 class CrmTeam(models.Model):
-    _inherit = 'crm.team'
+    _inherit = "crm.team"
 
-    invoiced_draft = fields.Float(compute='_compute_invoiced_draft', string='Draft Invoiced This Month', readonly=True)
+    invoiced_draft = fields.Float(
+        compute="_compute_invoiced_draft",
+        string="Draft Invoiced This Month",
+        readonly=True,
+    )
 
     def _compute_invoiced_draft(self):
         if not self:
             return
 
-        query = '''
+        query = """
             SELECT
                 move.team_id AS team_id,
                 SUM(move.amount_untaxed_signed) AS amount_untaxed_signed
@@ -19,9 +23,13 @@ class CrmTeam(models.Model):
             AND move.team_id IN %s
             AND move.date BETWEEN %s AND %s
             GROUP BY move.team_id
-        '''
+        """
         today = fields.Date.today()
-        params = [tuple(self.ids), fields.Date.to_string(today.replace(day=1)), fields.Date.to_string(today)]
+        params = [
+            tuple(self.ids),
+            fields.Date.to_string(today.replace(day=1)),
+            fields.Date.to_string(today),
+        ]
         self._cr.execute(query, params)
 
         data_map = dict((v[0], v[1]) for v in self._cr.fetchall())

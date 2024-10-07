@@ -8,9 +8,12 @@ _logger = logging.getLogger(__name__)
 class InheritResUsers(models.Model):
     _inherit = "res.users"
 
-    is_hide_archive = fields.Boolean(string="Hide All Action Archive and UnArchive Options")
+    is_hide_archive = fields.Boolean(
+        string="Hide All Action Archive and UnArchive Options"
+    )
     applied_archive_models_ids = fields.Many2many(
-        comodel_name="ir.model", string="Applied Models for Hiding Archive and UnArchive Options"
+        comodel_name="ir.model",
+        string="Applied Models for Hiding Archive and UnArchive Options",
     )
 
     @api.model
