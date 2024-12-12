@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Comment the results on the PR
-        uses: Libra-foundation/radon-comment@V1.0
+        uses: Libra-foundation/radon-comment@v0.1
         with:
           src: "."
           min: "A"

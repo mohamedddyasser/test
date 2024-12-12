@@ -1,0 +1,260 @@
+<odoo>
+    <data>
+
+        <template id="receipt_voucher_account_payment_layout">
+            <div class="article" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+                <t t-out="0"/>
+            </div>
+        </template>
+
+        <template id="receipt_voucher_account_payment_document">
+            <t t-set="o" t-value="o.with_context(lang=lang)"/>
+            <t t-set="values" t-value="o._get_payment_receipt_report_values()"/>
+            <t t-call="abra_accounting_enhanecment.receipt_voucher_account_payment_layout">
+                <div style="border:4px solid black;">
+
+                    <table class="table-borderless" style="border: none;">
+                        <tr>
+
+                            <td style="width: 25%;">
+                                <img t-att-src="image_data_uri(o.company_id.logo)" alt="ABRA Logo"
+                                     style="width: 170px; height: 50px; margin-top: 15px; margin-left: 10px"/>
+                            </td>
+
+                            <td style="width: 47%;">
+                                <table>
+                                    <tr>
+                                        <td style="text-align: right;">
+                                            <div>
+                                                <strong>
+                                                    <t t-esc="o.company_id.name"/>
+                                                </strong>
+                                            </div>
+                                            <div>
+                                                <span>
+                                                    <t t-if="o.company_id.street">
+                                                        <t t-esc="o.company_id.street"/>
+                                                    </t>
+                                                    <t t-if="o.company_id.street2">
+                                                        <t t-esc="o.company_id.street2"/>
+                                                    </t>
+                                                    <t t-if="o.company_id.city">
+                                                        <t t-esc="o.company_id.city"/>
+                                                    </t>
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <span>
+                                                    Post Box:
+                                                    <t t-esc="o.company_id.zip"/>
+                                                    <t t-esc="o.company_id.state_id.name"/>
+                                                    <t t-esc="o.company_id.country_id.name"/>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <img src="/abra_accounting_enhanecment/static/description/location.png"
+                                                 alt="Location Icon"
+                                                 style="width: 20px; height: 20px; margin: 48px 0px 0px 5px;"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+
+                            <td style="text-align: right;">
+                                <span>
+                                    <t t-esc="o.company_id.email"/>
+                                    <img src="/abra_accounting_enhanecment/static/description/email.png"
+                                         alt="Email Icon"
+                                         style="width:16px; height:20px; margin-right:5px;"/>
+                                </span>
+                                <br/>
+                                <span>
+                                    <t t-esc="o.company_id.phone"/>
+                                    <img src="/abra_accounting_enhanecment/static/description/telephone.png"
+                                         alt="Phone Icon"
+                                         style="width:16px; height: 20px; margin-right: 5px;"/>
+                                </span>
+                                <br/>
+                                <span>
+                                    <t t-esc="o.company_id.mobile"/>
+                                    <img src="/abra_accounting_enhanecment/static/description/phone.png"
+                                         alt="Phone Icon"
+                                         style="width:16px; height: 20px; margin-right: 5px;"/>
+                                </span>
+                                <br/>
+                                <span>
+                                    <t t-esc="o.company_id.website.replace('http://', '')"/>
+                                    <img src="/abra_accounting_enhanecment/static/description/web.png"
+                                         alt="Website Icon"
+                                         style="width:16px; height: 20px; margin-right: 7px;"/>
+                                </span>
+                            </td>
+
+                        </tr>
+                    </table>
+
+                    <div style="color:red; margin-top: 10px; margin-bottom: 10px; text-align: center; font-size: 20px;">
+                        <strong>
+                            <span>
+                                RECEIPT VOUCHER
+                            </span>
+                        </strong>
+                    </div>
+
+                    <table style="border-collapse: collapse; border: 2px solid black; height:50px; margin-top: 10px; margin-left: 10px; margin-bottom: 10px;">
+                        <tr>
+                            <td width='150'
+                                style='text-align:left; border-width: medium; border-right: 2px solid black;'>
+                                <strong style="margin-left: 5px;">
+                                    <t t-esc="o.currency_id.name"/>:
+                                    <t t-esc="o.amount"/>
+                                </strong>
+                            </td>
+                            <td width='250' style='text-align:left;border-width: medium;border-right: 2px solid black;'>
+                                <strong style="margin-left: 5px;">
+                                    Receipt No:
+                                    <t t-esc="o.name"/>
+                                </strong>
+                            </td>
+                            <td width='150' style='text-align:right;border-width: medium;'>
+                                <strong>
+                                    <t t-esc="o.date"/>
+                                </strong>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div align="left"
+                         style="border: 2px solid black;background-color: #e8e6e6;line-height:30px; margin: 0px 10px;">
+                        <div>
+                            <strong align="left" style="margin-left: 5px;">
+                                Received with thanks from Messrs :
+                                <t t-esc="o.partner_id.name"/>
+                            </strong>
+                        </div>
+                        <div>
+                            <strong align="left" style="margin-left: 5px;">
+                                The Sum of Dhs. :
+                                <t t-esc="o.currency_id.amount_to_text(o.amount)"/>
+                            </strong>
+                        </div>
+                        <div>
+                            <strong align="left" style="margin-left: 5px;">
+                                Being.
+                                <t t-if="o.reconciled_invoice_ids">
+                                    <t t-esc="', '.join(o.reconciled_invoice_ids.mapped('name'))"/>
+                                </t>
+                                <t t-elif="o.reconciled_bill_ids">
+                                    <t t-esc="', '.join(o.reconciled_bill_ids.mapped('name'))"/>
+                                </t>
+                            </strong>
+                        </div>
+                        <table class="table-borderless" style="border: none; margin-left:5px;">
+                            <tr>
+                                <t t-if="o.check_number">
+                                    <td width='350'
+                                        style='border: none;text-align:left;border-top:none;border-bottom:none;'>
+                                        <strong style='text-align:left;'>
+                                            Cheque No.:
+                                            <span t-esc="o.check_number"/>
+                                        </strong>
+                                    </td>
+                                </t>
+                                <t t-elif="o.payment_type == 'inbound' and not o.check_number">
+                                    <td width='623' style='border: none;text-align:left;'>
+                                        <strong style='text-align:left;'>
+                                            Bank:
+                                            <span t-field="o.journal_id.bank_id.name"/>
+                                        </strong>
+                                    </td>
+                                </t>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div t-if="o.check_number" align="left"
+                         style="height: 25px;width: 300px;font-family: 'Almarai';background-color: #e8e6e6;text-align:center;line-height:30px; margin-top: 10px; margin-left: 10px;">
+                        <span style="text-align:center;">CHEQUE SUBJECT TO REALISATION</span>
+                    </div>
+
+                    <div style="margin-top: 10px; margin-left: 10px; margin-bottom: 50px;">
+                        <table class="table-borderless" style="border: none;">
+                            <tr>
+                                <td width='50'
+                                    style='border: none;text-align:left;border-top:none;border-bottom:none;'>
+                                    <strong style='text-align:left;'>
+                                        STAMP:
+                                    </strong>
+                                </td>
+                                <td width='623' style='border: none;text-align:left;'>
+                                    <t t-if="o.company_id.stamp">
+                                        <img t-att-src="image_data_uri(o.company_id.stamp)" alt="ABRA Stamp"
+                                             class="logo"
+                                             style="height:100px;"/>
+                                    </t>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div style="margin-top:100px;">
+                        <table class="table-borderless" style="border: none; width: 100%;">
+                            <tr>
+                                <td colspan='6'>
+                                    <strong style="margin-left: 10px;">
+                                        SIGN........................................
+                                    </strong>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                </td>
+                                <td colspan='6' style='text-align: right;'>
+                                    <img src="/abra_accounting_enhanecment/static/description/banner.png" alt="Banner"
+                                         style="width: 200px;"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="receipt_voucher_account_payment">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.partner_id.lang or o.company_id.partner_id.lang"/>
+                    <t t-call="abra_accounting_enhanecment.receipt_voucher_account_payment_document" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+
+        <record id="paperformat_receipt_voucher" model="report.paperformat">
+            <field name="name">Receipt Voucher Paper</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">40</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="action_receipt_voucher_account_payment" model="ir.actions.report">
+            <field name="name">Receipt Voucher</field>
+            <field name="model">account.payment</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">abra_accounting_enhanecment.receipt_voucher_account_payment</field>
+            <field name="report_file">abra_accounting_enhanecment.receipt_voucher_account_payment</field>
+            <field name="binding_model_id" ref="account.model_account_payment"/>
+            <field name="paperformat_id" ref="abra_accounting_enhanecment.paperformat_receipt_voucher"/>
+            <field name="binding_type">report</field>
+        </record>
+
+    </data>
+</odoo>
